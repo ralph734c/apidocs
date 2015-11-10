@@ -47,7 +47,12 @@
 
 <p>Zinc offers the underlying API for apps that need real-time order placing capabilities. With a single POST request, you can order an item from one of our supporter retailers.</p>
 
-<p>If you input a valid client token, credit card, and retailer account, this will place a live order.</p>
+<h3 id="quick-start">Quick Start</h3>
+
+<ol>
+<li>Make an account at <a href="https://dash.zinc.io">dash.zinc.io</a>.</li>
+<li>Follow the instructions in the <a href="#create-an-order">create an order</a> section from the documentation below to place your first order.</li>
+</ol>
 
 <h1 id="authentication">Authentication</h1>
 
@@ -65,6 +70,8 @@
           <h1 id="orders">Orders</h1>
 
 <h2 id="create-an-order">Create an order</h2>
+
+<p>Zinc offers the underlying API for apps that need real-time order placing capabilities. With a single POST request, you can order an item from one of our supported retailers. Making an order request will start an order. You&rsquo;ll receive a <code class="prettyprint">request_id</code> in the POST body&rsquo;s response which you&rsquo;ll then use for <a href="#retrieving-an-order">retrieving the status of the order</a>.</p>
 
 <blockquote>
 <p>Example create an order request</p>
@@ -134,6 +141,14 @@
     "any_other_field": ["any value"]
   }
 }'</span>
+</code></pre>
+
+<blockquote>
+<p>Example create an order response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"request_id"</span>: <span class="s2">"3f1c939065cf58e7b9f0aea70640dffc"</span>
+<span class="o">}</span>
 </code></pre>
 
 <h3 id="required-attributes">Required Attributes</h3>
