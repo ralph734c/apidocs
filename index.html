@@ -47,14 +47,14 @@
 
 <p>Zinc offers the underlying API for apps that need real-time order placing capabilities. With a single POST request, you can order an item from one of our supporter retailers.</p>
 
-<h3 id="quick-start">Quick Start</h3>
+<h3 id="quick-start">Quick start</h3>
 
 <ol>
 <li>Make an account at <a href="https://dash.zinc.io">dash.zinc.io</a>.</li>
 <li>Follow the instructions in the <a href="#create-an-order">create an order</a> section from the documentation below to place your first order.</li>
 </ol>
 
-<h1 id="supported-retailers">Supported Retailers</h1>
+<h1 id="supported-retailers">Supported retailers</h1>
 
 <p>The table below shows the endpoints available for each retailer. We can add additional retailers upon request &ndash; fill out the form at the <a href="https://zinc.io/#bottom">bottom of our home page</a> for a quote for a particular retailer.</p>
 
@@ -215,7 +215,7 @@
 <span class="o">}</span>
 </code></pre>
 
-<h3 id="required-attributes">Required Attributes</h3>
+<h3 id="required-attributes">Required attributes</h3>
 
 <table><thead>
 <tr>
@@ -261,7 +261,7 @@
 </tr>
 </tbody></table>
 
-<h3 id="optional-attributes">Optional Attributes</h3>
+<h3 id="optional-attributes">Optional attributes</h3>
 
 <table><thead>
 <tr>
@@ -412,6 +412,26 @@
   -u client_token:
 </code></pre>
 
+<h3 id="product-detail-request-attributes">Product detail request attributes</h3>
+
+<p>To retrieve product details, make a GET request to the following URL, replacing <code class="prettyprint">:product_id</code> with the retailer&rsquo;s unique identifier for a particular product and specifying the request attributes as query parameters in the URL.</p>
+
+<p><code class="prettyprint">https://api.zinc.io/v1/products/:product_id</code></p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>retailer</td>
+<td>String</td>
+<td>The retailer for the product</td>
+</tr>
+</tbody></table>
+
 <blockquote>
 <p>Example product details response</p>
 </blockquote>
@@ -453,7 +473,7 @@
 <span class="o">}</span>
 </code></pre>
 
-<h3 id="product-detail-attributes">Product detail attributes</h3>
+<h3 id="product-detail-response-attributes">Product detail response attributes</h3>
 
 <table><thead>
 <tr>
@@ -506,9 +526,29 @@
 <blockquote>
 <p>Example product offers request</p>
 </blockquote>
-<pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964/offers/retailer<span class="o">=</span>amazon <span class="se">\</span>
+<pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964/offers?retailer<span class="o">=</span>amazon <span class="se">\</span>
   -u client_token:
 </code></pre>
+
+<h3 id="product-offers-request-attributes">Product offers request attributes</h3>
+
+<p>To retrieve product offers and prices, make a GET request to the following URL, replacing <code class="prettyprint">:product_id</code> with the retailer&rsquo;s unique identifier for a particular product and specifying the request attributes as query parameters in the URL.</p>
+
+<p><code class="prettyprint">https://api.zinc.io/v1/products/:product_id/offers</code></p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>retailer</td>
+<td>String</td>
+<td>The retailer for the product</td>
+</tr>
+</tbody></table>
 
 <blockquote>
 <p>Example product offers response</p>
@@ -536,7 +576,7 @@
 <span class="o">}</span>
 </code></pre>
 
-<h3 id="product-offers-attributes">Product offers attributes</h3>
+<h3 id="product-offers-response-attributes">Product offers response attributes</h3>
 
 <table><thead>
 <tr>
