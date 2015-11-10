@@ -54,20 +54,85 @@
 <li>Follow the instructions in the <a href="#create-an-order">create an order</a> section from the documentation below to place your first order.</li>
 </ol>
 
-<h1 id="authentication">Authentication</h1>
+<h1 id="supported-retailers">Supported Retailers</h1>
 
-<blockquote>
-<p>Example authentication request</p>
-</blockquote>
-<pre class="highlight shell"><code>curl https://api.zinc.io/v1/orders <span class="se">\</span>
-  -H client_token:
-</code></pre>
+<p>The table below shows the endpoints available for each retailer. We can add additional retailers upon request &ndash; fill out the form at the <a href="https://zinc.io/#bottom">bottom of our home page</a> for a quote for a particular retailer.</p>
 
-<p>You can authenticate your account by including your client token in your request. Authentication is performed through HTTP Basic Auth, where the client token is the basic auth username value. You do not need to provide a password.</p>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Retailer Code</th>
+<th>Orders</th>
+<th>Product Details</th>
+<th>Product Prices</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Amazon</td>
+<td>amazon</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Amazon United Kingdom</td>
+<td>amazon_uk</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Amazon Canada</td>
+<td>amazon_ca</td>
+<td>Y</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Nordstrom</td>
+<td>nordstrom</td>
+<td>Y</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Shopbop</td>
+<td>shopbop</td>
+<td>Y</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>East Dane</td>
+<td>eastdane</td>
+<td>Y</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Newegg</td>
+<td>newegg</td>
+<td>Y</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Walmart</td>
+<td>walmart</td>
+<td>Y</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Google Shopping</td>
+<td>google_shopping</td>
+<td></td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+</tbody></table>
 
-<p>Make sure that you don&rsquo;t share your client token and that you keep it away from publicly accessible areas such as Github, client-side code, etc. Client tokens are tied to your account, so you will be charged for any orders or requests made with your client token. If you believe your client token has been compromised, please contact support@zinc.io immediately.</p>
-
-          <h1 id="orders">Orders</h1>
+          <h1 id="place-an-order">Place an order</h1>
 
 <h2 id="create-an-order">Create an order</h2>
 
@@ -337,6 +402,177 @@
 </tr>
 </tbody></table>
 
+          <h1 id="get-product-details">Get product details</h1>
+
+<p>Get up to date information on the title, description, manufacturer details, item specifics, and more for any product on our supported retailers.</p>
+
+<blockquote>
+<p>Example product details request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964?retailer<span class="o">=</span>amazon <span class="se">\</span>
+  -u client_token:
+</code></pre>
+
+<blockquote>
+<p>Example product details response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"product_description"</span>: <span class="s2">"This is a great book!"</span>,
+  <span class="s2">"retailer"</span>: <span class="s2">"amazon"</span>,
+  <span class="s2">"epids"</span>:[
+    <span class="o">{</span>
+      <span class="s2">"type"</span>: <span class="s2">"EAN"</span>,
+      <span class="s2">"value"</span>: <span class="s2">"9780923568962"</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">"type"</span>: <span class="s2">"ISBN"</span>,
+      <span class="s2">"value"</span>: <span class="s2">"0923568964"</span>
+    <span class="o">}</span>
+  <span class="o">]</span>,
+  <span class="s2">"product_details"</span>: <span class="o">[</span>
+    <span class="s2">"Series: The Easy Way!"</span>,
+    <span class="s2">"Paperback: 60 pages"</span>,
+    <span class="s2">"Publisher: XanEdu Publishing Inc; 2nd Edition edition (September 28, 2009)"</span>,
+    <span class="s2">"Language: English"</span>,
+    <span class="s2">"ISBN-10: 0923568964"</span>,
+    <span class="s2">"ISBN-13: 978-0923568962"</span>,
+    <span class="s2">"Product Dimensions: 8.3 x 5.3 x 0.2 inches"</span>,
+    <span class="s2">"Shipping Weight: 3.5 ounces"</span>
+  <span class="o">]</span>,
+  <span class="s2">"title"</span>: <span class="s2">"APA: The Easy Way! [Updated for APA 6th Edition]"</span>,
+  <span class="s2">"variant_specifics"</span>: <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">"dimension"</span>: <span class="s2">"Color"</span>,
+      <span class="s2">"value"</span>: <span class="s2">"Gray"</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">"dimension"</span>: <span class="s2">"Size"</span>,
+      <span class="s2">"value"</span>: <span class="s2">"Small/Medium"</span>
+    <span class="o">}</span>
+  <span class="o">]</span>,
+  <span class="s2">"product_id"</span>: <span class="s2">"0923568964"</span>
+<span class="o">}</span>
+</code></pre>
+
+<h3 id="product-detail-attributes">Product detail attributes</h3>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>product_description</td>
+<td>String</td>
+<td>The description of the product</td>
+</tr>
+<tr>
+<td>retailer</td>
+<td>String</td>
+<td>The retailer for the product</td>
+</tr>
+<tr>
+<td>epids</td>
+<td>Array</td>
+<td>Array of objects containing external product identifier (epid) objects. An epid object contains a <code class="prettyprint">type</code> field describing the name of the external product identifier and a <code class="prettyprint">value</code> field for the identifier&rsquo;s value.</td>
+</tr>
+<tr>
+<td>product_details</td>
+<td>Array</td>
+<td>An array of strings providing details about the product</td>
+</tr>
+<tr>
+<td>title</td>
+<td>String</td>
+<td>Title of the product</td>
+</tr>
+<tr>
+<td>variant_specifics</td>
+<td>Array</td>
+<td>Array of objects containing information about the types and values of product variants available. A variant specifics object contains a <code class="prettyprint">dimension</code> field describing the type of the variant (e.g. &ldquo;Color&rdquo;) and a <code class="prettyprint">value</code> field describing the specific value available.</td>
+</tr>
+<tr>
+<td>product_id</td>
+<td>String</td>
+<td>The retailer&rsquo;s unique identifier for the product</td>
+</tr>
+</tbody></table>
+
+<h1 id="get-product-prices">Get product prices</h1>
+
+<p>Get information about all the offers for a particular product, including seller name, item price, shipping price, condition, seller reputation, and more.</p>
+
+<blockquote>
+<p>Example product offers request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964/offers/retailer<span class="o">=</span>amazon <span class="se">\</span>
+  -u client_token:
+</code></pre>
+
+<blockquote>
+<p>Example product offers response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"retailer"</span>: <span class="s2">"amazon"</span>,
+  <span class="s2">"offers"</span>:[
+    <span class="o">{</span>
+      <span class="s2">"addon"</span>: <span class="nb">false</span>,
+      <span class="s2">"condition"</span>: <span class="s2">"New"</span>,
+      <span class="s2">"handling_days_max"</span>: 0,
+      <span class="s2">"handling_days_min"</span>: 0,
+      <span class="s2">"international"</span>: <span class="nb">false</span>,
+      <span class="s2">"merchant_id"</span>: <span class="s2">"ATVPDKIKX0DER"</span>,
+      <span class="s2">"offerlisting_id"</span>: <span class="s2">"lUai8vEbhC%2F2vYZDwaePlc4baWiHzAy9XJncUR%2FpQ9l4VOrs%2FfpYt4ZtreQaB%2BPL1xJwz5OpIc%2BJjyymHg3iv4YkZvWy5z7flil7n7lUDWNPY76YUhMNdw%3D%3D"</span>,
+      <span class="s2">"price"</span>: 9.79,
+      <span class="s2">"ship_price"</span>: 0
+      <span class="s2">"prime"</span>: <span class="nb">true</span>,
+      <span class="s2">"prime_only"</span>: <span class="nb">false</span>,
+      <span class="s2">"seller_name"</span>: <span class="s2">"Amazon.com"</span>,
+      <span class="s2">"seller_num_ratings"</span>: 1000000,
+      <span class="s2">"seller_percent_positive"</span>: 100,
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+</code></pre>
+
+<h3 id="product-offers-attributes">Product offers attributes</h3>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>retailer</td>
+<td>String</td>
+<td>The retailer for the product offers</td>
+</tr>
+<tr>
+<td>offers</td>
+<td>Array</td>
+<td>An array of <a href="#product-offer-object">product offer objects</a> for a particular product on a retailer</td>
+</tr>
+</tbody></table>
+
+          <h1 id="authentication">Authentication</h1>
+
+<blockquote>
+<p>Example authentication request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://api.zinc.io/v1/orders <span class="se">\</span>
+  -H client_token:
+</code></pre>
+
+<p>You can authenticate your account by including your client token in your request. Authentication is performed through HTTP Basic Auth, where the client token is the basic auth username value. You do not need to provide a password.</p>
+
+<p>Make sure that you don&rsquo;t share your client token and that you keep it away from publicly accessible areas such as Github, client-side code, etc. Client tokens are tied to your account, so you will be charged for any orders or requests made with your client token. If you believe your client token has been compromised, please contact support@zinc.io immediately.</p>
+
+          <h1 id="object-reference">Object reference</h1>
+
 <h2 id="product-object">Product object</h2>
 
 <table><thead>
@@ -566,160 +802,6 @@
 <td>placed_at</td>
 <td>Date</td>
 <td>The date and time at which the order was placed</td>
-</tr>
-</tbody></table>
-
-          <h1 id="products">Products</h1>
-
-<h2 id="get-product-details">Get product details</h2>
-
-<blockquote>
-<p>Example product details request</p>
-</blockquote>
-<pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964?retailer<span class="o">=</span>amazon <span class="se">\</span>
-  -u client_token:
-</code></pre>
-
-<blockquote>
-<p>Example product details response</p>
-</blockquote>
-<pre class="highlight shell"><code><span class="o">{</span>
-  <span class="s2">"product_description"</span>: <span class="s2">"This is a great book!"</span>,
-  <span class="s2">"retailer"</span>: <span class="s2">"amazon"</span>,
-  <span class="s2">"epids"</span>:[
-    <span class="o">{</span>
-      <span class="s2">"type"</span>: <span class="s2">"EAN"</span>,
-      <span class="s2">"value"</span>: <span class="s2">"9780923568962"</span>
-    <span class="o">}</span>,
-    <span class="o">{</span>
-      <span class="s2">"type"</span>: <span class="s2">"ISBN"</span>,
-      <span class="s2">"value"</span>: <span class="s2">"0923568964"</span>
-    <span class="o">}</span>
-  <span class="o">]</span>,
-  <span class="s2">"product_details"</span>: <span class="o">[</span>
-    <span class="s2">"Series: The Easy Way!"</span>,
-    <span class="s2">"Paperback: 60 pages"</span>,
-    <span class="s2">"Publisher: XanEdu Publishing Inc; 2nd Edition edition (September 28, 2009)"</span>,
-    <span class="s2">"Language: English"</span>,
-    <span class="s2">"ISBN-10: 0923568964"</span>,
-    <span class="s2">"ISBN-13: 978-0923568962"</span>,
-    <span class="s2">"Product Dimensions: 8.3 x 5.3 x 0.2 inches"</span>,
-    <span class="s2">"Shipping Weight: 3.5 ounces"</span>
-  <span class="o">]</span>,
-  <span class="s2">"title"</span>: <span class="s2">"APA: The Easy Way! [Updated for APA 6th Edition]"</span>,
-  <span class="s2">"variant_specifics"</span>: <span class="o">[</span>
-    <span class="o">{</span>
-      <span class="s2">"dimension"</span>: <span class="s2">"Color"</span>,
-      <span class="s2">"value"</span>: <span class="s2">"Gray"</span>
-    <span class="o">}</span>,
-    <span class="o">{</span>
-      <span class="s2">"dimension"</span>: <span class="s2">"Size"</span>,
-      <span class="s2">"value"</span>: <span class="s2">"Small/Medium"</span>
-    <span class="o">}</span>
-  <span class="o">]</span>,
-  <span class="s2">"product_id"</span>: <span class="s2">"0923568964"</span>
-<span class="o">}</span>
-</code></pre>
-
-<h3 id="product-detail-attributes">Product detail attributes</h3>
-
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>product_description</td>
-<td>String</td>
-<td>The description of the product</td>
-</tr>
-<tr>
-<td>retailer</td>
-<td>String</td>
-<td>The retailer for the product</td>
-</tr>
-<tr>
-<td>epids</td>
-<td>Array</td>
-<td>Array of objects containing external product identifier (epid) objects. An epid object contains a <code class="prettyprint">type</code> field describing the name of the external product identifier and a <code class="prettyprint">value</code> field for the identifier&rsquo;s value.</td>
-</tr>
-<tr>
-<td>product_details</td>
-<td>Array</td>
-<td>An array of strings providing details about the product</td>
-</tr>
-<tr>
-<td>title</td>
-<td>String</td>
-<td>Title of the product</td>
-</tr>
-<tr>
-<td>variant_specifics</td>
-<td>Array</td>
-<td>Array of objects containing information about the types and values of product variants available. A variant specifics object contains a <code class="prettyprint">dimension</code> field describing the type of the variant (e.g. &ldquo;Color&rdquo;) and a <code class="prettyprint">value</code> field describing the specific value available.</td>
-</tr>
-<tr>
-<td>product_id</td>
-<td>String</td>
-<td>The retailer&rsquo;s unique identifier for the product</td>
-</tr>
-</tbody></table>
-
-<h2 id="get-product-offers">Get product offers</h2>
-
-<blockquote>
-<p>Example product offers request</p>
-</blockquote>
-<pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964/offers/retailer<span class="o">=</span>amazon <span class="se">\</span>
-  -u client_token:
-</code></pre>
-
-<blockquote>
-<p>Example product offers response</p>
-</blockquote>
-<pre class="highlight shell"><code><span class="o">{</span>
-  <span class="s2">"retailer"</span>: <span class="s2">"amazon"</span>,
-  <span class="s2">"offers"</span>:[
-    <span class="o">{</span>
-      <span class="s2">"addon"</span>: <span class="nb">false</span>,
-      <span class="s2">"condition"</span>: <span class="s2">"New"</span>,
-      <span class="s2">"handling_days_max"</span>: 0,
-      <span class="s2">"handling_days_min"</span>: 0,
-      <span class="s2">"international"</span>: <span class="nb">false</span>,
-      <span class="s2">"merchant_id"</span>: <span class="s2">"ATVPDKIKX0DER"</span>,
-      <span class="s2">"offerlisting_id"</span>: <span class="s2">"lUai8vEbhC%2F2vYZDwaePlc4baWiHzAy9XJncUR%2FpQ9l4VOrs%2FfpYt4ZtreQaB%2BPL1xJwz5OpIc%2BJjyymHg3iv4YkZvWy5z7flil7n7lUDWNPY76YUhMNdw%3D%3D"</span>,
-      <span class="s2">"price"</span>: 9.79,
-      <span class="s2">"ship_price"</span>: 0
-      <span class="s2">"prime"</span>: <span class="nb">true</span>,
-      <span class="s2">"prime_only"</span>: <span class="nb">false</span>,
-      <span class="s2">"seller_name"</span>: <span class="s2">"Amazon.com"</span>,
-      <span class="s2">"seller_num_ratings"</span>: 1000000,
-      <span class="s2">"seller_percent_positive"</span>: 100,
-    <span class="o">}</span>
-  <span class="o">]</span>
-<span class="o">}</span>
-</code></pre>
-
-<h3 id="product-offers-attributes">Product offers attributes</h3>
-
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>retailer</td>
-<td>String</td>
-<td>The retailer for the product offers</td>
-</tr>
-<tr>
-<td>offers</td>
-<td>Array</td>
-<td>An array of <a href="#product-offer-object">product offer objects</a> for a particular product on a retailer</td>
 </tr>
 </tbody></table>
 
