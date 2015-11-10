@@ -149,11 +149,10 @@
     {
       "product_id": "0923568964", 
       "quantity": 1,
-      "seller_selection_criteria": [
+      "variants": [
         {
-          "condition_in": ["New"],
-          "international": false,
-          "max_shipping_days": 5
+          "dimension": "color",
+          "value": "Red",
         }
       ]
     }
@@ -165,7 +164,7 @@
     "address_line1": "77 Massachusetts Avenue",
     "address_line2": "",
     "zip_code": "02139",
-    "city": "Cambridge", 
+    "city": "Cambridge",
     "state": "MA",
     "country": "US",
     "phone_number": "5551230101"
@@ -182,12 +181,12 @@
     "use_gift": false
   },
   "billing_address": {
-    "first_name": "William", 
+    "first_name": "William",
     "last_name": "Rogers",
     "address_line1": "84 Massachusetts Ave",
     "address_line2": "",
     "zip_code": "02139",
-    "city": "Cambridge", 
+    "city": "Cambridge",
     "state": "MA",
     "country": "US",
     "phone_number": "5551234567"
@@ -531,7 +530,7 @@
       <span class="s2">"prime_only"</span>: <span class="nb">false</span>,
       <span class="s2">"seller_name"</span>: <span class="s2">"Amazon.com"</span>,
       <span class="s2">"seller_num_ratings"</span>: 1000000,
-      <span class="s2">"seller_percent_positive"</span>: 100,
+      <span class="s2">"seller_percent_positive"</span>: 100
     <span class="o">}</span>
   <span class="o">]</span>
 <span class="o">}</span>
@@ -575,6 +574,21 @@
 
 <h2 id="product-object">Product object</h2>
 
+<blockquote>
+<p>Example product object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"product_id"</span>: <span class="s2">"0923568964"</span>,
+  <span class="s2">"quantity"</span>: 1,
+  <span class="s2">"variants"</span>: <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">"dimension"</span>: <span class="s2">"color"</span>,
+      <span class="s2">"value"</span>: <span class="s2">"Red"</span>,
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+</code></pre>
+
 <table><thead>
 <tr>
 <th>Attribute</th>
@@ -592,9 +606,30 @@
 <td>Number</td>
 <td>The number of products to purchase.</td>
 </tr>
+<tr>
+<td>variants</td>
+<td>Array</td>
+<td>An array of variant objects containing information about the types of values of a specific product variant to select. A variant contains <code class="prettyprint">dimension</code> field describing the type of the variant (e.g. &ldquo;color&rdquo; or &ldquo;size&rdquo;) and a <code class="prettyprint">value</code> field describing the specific value to select.</td>
+</tr>
 </tbody></table>
 
 <h2 id="address-object">Address object</h2>
+
+<blockquote>
+<p>Example address object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"first_name"</span>: <span class="s2">"Tim"</span>,
+  <span class="s2">"last_name"</span>: <span class="s2">"Beaver"</span>,
+  <span class="s2">"address_line1"</span>: <span class="s2">"77 Massachusetts Avenue"</span>,
+  <span class="s2">"address_line2"</span>: <span class="s2">""</span>,
+  <span class="s2">"zip_code"</span>: <span class="s2">"02139"</span>,
+  <span class="s2">"city"</span>: <span class="s2">"Cambridge"</span>,
+  <span class="s2">"state"</span>: <span class="s2">"MA"</span>,
+  <span class="s2">"country"</span>: <span class="s2">"US"</span>,
+  <span class="s2">"phone_number"</span>: <span class="s2">"5551230101"</span>
+<span class="o">}</span>
+</code></pre>
 
 <table><thead>
 <tr>
@@ -652,6 +687,19 @@
 
 <h2 id="payment-method-object">Payment method object</h2>
 
+<blockquote>
+<p>Example payment object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"name_on_card"</span>: <span class="s2">"Ben Bitdiddle"</span>,
+  <span class="s2">"number"</span>: <span class="s2">"5555555555554444"</span>,
+  <span class="s2">"security_code"</span>: <span class="s2">"123"</span>,
+  <span class="s2">"expiration_month"</span>: 1,
+  <span class="s2">"expiration_year"</span>: 2015,
+  <span class="s2">"use_gift"</span>: <span class="nb">false</span>
+<span class="o">}</span>
+</code></pre>
+
 <table><thead>
 <tr>
 <th>Attribute</th>
@@ -693,6 +741,16 @@
 
 <h2 id="webhooks-object">Webhooks object</h2>
 
+<blockquote>
+<p>Example webhooks object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"order_placed"</span>: <span class="s2">"http://mywebsite.com/zinc/order_placed"</span>,
+  <span class="s2">"order_failed"</span>: <span class="s2">"http://mywebsite.com/zinc/order_failed"</span>,
+  <span class="s2">"tracking_obtained"</span>: <span class="s2">"http://mywebsite.com/zinc/tracking_obtained"</span>
+<span class="o">}</span>
+</code></pre>
+
 <table><thead>
 <tr>
 <th>Attribute</th>
@@ -719,6 +777,15 @@
 
 <h2 id="retailer-credentials-object">Retailer credentials object</h2>
 
+<blockquote>
+<p>Example retailer credentials object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"email"</span>: <span class="s2">"timbeaver@gmail.com"</span>,
+  <span class="s2">"password"</span>: <span class="s2">"myRetailerPassword"</span>
+<span class="o">}</span>
+</code></pre>
+
 <table><thead>
 <tr>
 <th>Attribute</th>
@@ -740,6 +807,17 @@
 
 <h2 id="price-components-object">Price components object</h2>
 
+<blockquote>
+<p>Example price components object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"shipping"</span> : 0,
+  <span class="s2">"subtotal"</span> : 1999,
+  <span class="s2">"tax"</span> : 0,
+  <span class="s2">"total"</span> : 1999
+<span class="o">}</span>
+</code></pre>
+
 <table><thead>
 <tr>
 <th>Attribute</th>
@@ -751,11 +829,6 @@
 <td>shipping</td>
 <td>Number</td>
 <td>The price for shipping</td>
-</tr>
-<tr>
-<td>gift_certificate</td>
-<td>Number</td>
-<td>The amount of value used on a gift certificate placed on the account</td>
 </tr>
 <tr>
 <td>subtotal</td>
@@ -772,9 +845,25 @@
 <td>Number</td>
 <td>The total price paid for the order</td>
 </tr>
+<tr>
+<td>gift_certificate</td>
+<td>Number</td>
+<td>(Optional) The amount of value used on a gift certificate placed on the account</td>
+</tr>
 </tbody></table>
 
 <h2 id="merchant-order-ids-object">Merchant order ids object</h2>
+
+<blockquote>
+<p>Example merchant order ids object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"merchant_order_id"</span> : <span class="s2">"112-1234567-7272727"</span>,
+  <span class="s2">"merchant"</span> : <span class="s2">"amazon"</span>,
+  <span class="s2">"account"</span> : <span class="s2">"timbeaver@gmail.com"</span>,
+  <span class="s2">"placed_at"</span> : ISODate<span class="o">(</span><span class="s2">"2014-07-02T23:51:08.366Z"</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre>
 
 <table><thead>
 <tr>
@@ -806,6 +895,27 @@
 </tbody></table>
 
 <h2 id="product-offer-object">Product offer object</h2>
+
+<blockquote>
+<p>Example product offer object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"addon"</span>: <span class="nb">false</span>,
+  <span class="s2">"condition"</span>: <span class="s2">"New"</span>,
+  <span class="s2">"handling_days_max"</span>: 0,
+  <span class="s2">"handling_days_min"</span>: 0,
+  <span class="s2">"international"</span>: <span class="nb">false</span>,
+  <span class="s2">"merchant_id"</span>: <span class="s2">"ATVPDKIKX0DER"</span>,
+  <span class="s2">"offerlisting_id"</span>: <span class="s2">"lUai8vEbhC%2F2vYZDwaePlc4baWiHzAy9XJncUR%2FpQ9l4VOrs%2FfpYt4ZtreQaB%2BPL1xJwz5OpIc%2BJjyymHg3iv4YkZvWy5z7flil7n7lUDWNPY76YUhMNdw%3D%3D"</span>,
+  <span class="s2">"price"</span>: 9.79,
+  <span class="s2">"ship_price"</span>: 0
+  <span class="s2">"prime"</span>: <span class="nb">true</span>,
+  <span class="s2">"prime_only"</span>: <span class="nb">false</span>,
+  <span class="s2">"seller_name"</span>: <span class="s2">"Amazon.com"</span>,
+  <span class="s2">"seller_num_ratings"</span>: 1000000,
+  <span class="s2">"seller_percent_positive"</span>: 100
+<span class="o">}</span>
+</code></pre>
 
 <table><thead>
 <tr>
