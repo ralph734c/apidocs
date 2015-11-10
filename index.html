@@ -8,12 +8,12 @@
 
     <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
     <link href="stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
       <script src="javascripts/all.js" type="text/javascript"></script>
 
       <script>
         $(function() {
-          setupLanguages(["shell","ruby","python"]);
+          setupLanguages(["shell"]);
         });
       </script>
   </head>
@@ -26,11 +26,9 @@
       </span>
     </a>
     <div class="tocify-wrapper">
-      <img src="images/logo.png" />
+      <img src="images/zinc-light.png" />
         <div class="lang-selector">
               <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="ruby">ruby</a>
-              <a href="#" data-language-name="python">python</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -39,158 +37,776 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
-            <li><a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+            <li><a href='http://dash.zinc.io'>Sign Up for a Zinc account</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+        <h1 id="introduction">Introduction</h1>
 
-<p>We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>Zinc offers the underlying API for apps that need real-time order placing capabilities. With a single POST request, you can order an item from one of our supporter retailers.</p>
 
-<p>This example API documentation page was created with <a href="http://github.com/tripit/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&rsquo;s documentation.</p>
-<h1 id='authentication'>Authentication</h1>
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'kittn'</span>
+<p>If you input a valid client token, credit card, and retailer account, this will place a live order.</p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre><code class="highlight python"><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre><code class="highlight shell"><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre>
+<h1 id="authentication">Authentication</h1>
 
 <blockquote>
-<p>Make sure to replace <code class="prettyprint">meowmeowmeow</code> with your API key.</p>
+<p>Example authentication request</p>
 </blockquote>
-
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
-
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code class="prettyprint">Authorization: meowmeowmeow</code></p>
-
-<p><aside class="notice">
-You must replace <code class="prettyprint">meowmeowmeow</code> with your personal API key.
-</aside></p>
-<h1 id='kittens'>Kittens</h1><h2 id='get-all-kittens'>Get All Kittens</h2><pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
+<pre class="highlight shell"><code>curl https://api.zinc.io/v1/orders <span class="se">\</span>
+  -H client_token:
 </code></pre>
-<pre><code class="highlight python"><span class="kn">import</span> <span class="nn">kittn</span>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre>
-<pre><code class="highlight shell">curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre>
+<p>You can authenticate your account by including your client token in your request. Authentication is performed through HTTP Basic Auth, where the client token is the basic auth username value. You do not need to provide a password.</p>
+
+<p>Make sure that you don&rsquo;t share your client token and that you keep it away from publicly accessible areas such as Github, client-side code, etc. Client tokens are tied to your account, so you will be charged for any orders or requests made with your client token. If you believe your client token has been compromised, please contact support@zinc.io immediately.</p>
+
+          <h1 id="orders">Orders</h1>
+
+<h2 id="create-an-order">Create an order</h2>
 
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>Example create an order request</p>
 </blockquote>
-<pre><code class="highlight json"><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isis"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders"</span> <span class="se">\</span>
+  -u client_token: <span class="se">\</span>
+  -d <span class="s1">'{
+  "retailer": "amazon",
+  "products": [
+    {
+      "product_id": "0923568964", 
+      "quantity": 1,
+      "seller_selection_criteria": [
+        {
+          "condition_in": ["New"],
+          "international": false,
+          "max_shipping_days": 5
+        }
+      ]
+    }
+  ],
+  "max_price": 2300,
+  "shipping_address": {
+    "first_name": "Tim",
+    "last_name": "Beaver",
+    "address_line1": "77 Massachusetts Avenue",
+    "address_line2": "",
+    "zip_code": "02139",
+    "city": "Cambridge", 
+    "state": "MA",
+    "country": "US",
+    "phone_number": "5551230101"
+  },
+  "is_gift": true,
+  "gift_message": "Here is your package, Tim! Enjoy!",
+  "shipping_method": "cheapest",
+  "payment_method": {
+    "name_on_card": "Ben Bitdiddle",
+    "number": "5555555555554444",
+    "security_code": "123",
+    "expiration_month": 1,
+    "expiration_year": 2015,
+    "use_gift": false
+  },
+  "billing_address": {
+    "first_name": "William", 
+    "last_name": "Rogers",
+    "address_line1": "84 Massachusetts Ave",
+    "address_line2": "",
+    "zip_code": "02139",
+    "city": "Cambridge", 
+    "state": "MA",
+    "country": "US",
+    "phone_number": "5551234567"
+  },
+  "retailer_credentials": {
+    "email": "timbeaver@gmail.com",
+    "password": "myRetailerPassword"
+  },
+  "webhooks": {
+    "order_placed": "http://mywebsite.com/zinc/order_placed",
+    "order_failed": "http://mywebsite.com/zinc/order_failed",
+    "tracking_obtained": "http://mywebsite.com/zinc/tracking_obtained"
+  },
+  "client_notes": {
+    "our_internal_order_id": "abc123",
+    "any_other_field": ["any value"]
+  }
+}'</span>
+</code></pre>
 
-<p>This endpoint retrieves all kittens.</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code class="prettyprint">GET http://example.com/kittens</code></p>
-<h3 id='query-parameters'>Query Parameters</h3>
+<h3 id="required-attributes">Required Attributes</h3>
+
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
+<th>Attribute</th>
+<th>Type</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
+<td>retailer</td>
+<td>String</td>
+<td>The retailer code of the supported retailer</td>
 </tr>
 <tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
+<td>products</td>
+<td>List</td>
+<td>A list of <a href="#product-object">product objects</a> that should be ordered</td>
+</tr>
+<tr>
+<td>shipping_address</td>
+<td>Object</td>
+<td>An <a href="#address-object">address object</a> to which the order will be delivered</td>
+</tr>
+<tr>
+<td>shipping_method</td>
+<td>String</td>
+<td>The desired shipping method for the object. Available methods are <code class="prettyprint">cheapest</code> (always select the cheapest method available), <code class="prettyprint">fastest</code> (always select the fastest method available), or <code class="prettyprint">free</code> (which will fail for items without some sort of free shipping).</td>
+</tr>
+<tr>
+<td>billing_address</td>
+<td>Object</td>
+<td>An <a href="#address-object">address object</a> for the person associated with the credit card</td>
+</tr>
+<tr>
+<td>payment_method</td>
+<td>Object</td>
+<td>A <a href="#payment-method-object">payment method</a> object containing payment information for the order</td>
+</tr>
+<tr>
+<td>retailer_credentials</td>
+<td>Object</td>
+<td>A <a href="#retailer-credentials-object">retailer credentials</a> object for logging into the retailer with a preexisting account</td>
 </tr>
 </tbody></table>
 
-<p><aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside></p>
-<h2 id='get-a-specific-kitten'>Get a Specific Kitten</h2><pre><code class="highlight ruby"><span class="nb">require</span> <span class="s1">'kittn'</span>
+<h3 id="optional-attributes">Optional Attributes</h3>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre>
-<pre><code class="highlight python"><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre>
-<pre><code class="highlight shell">curl <span class="s2">"http://example.com/api/kittens/3"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre>
-
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre><code class="highlight json"><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isis"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p>This endpoint retrieves a specific kitten.</p>
-
-<p><aside class="warning">If you&rsquo;re not using an administrator API key, note that some kittens will return 403 Forbidden if they are hidden for admins only.</aside></p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code class="prettyprint">GET http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters'>URL Parameters</h3>
 <table><thead>
 <tr>
-<th>Parameter</th>
+<th>Attribute</th>
+<th>Type</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the cat to retrieve</td>
+<td>gift_message</td>
+<td>String</td>
+<td>A message to include on the packing slip for the recipient. Must be no more than 240 characters, or 9 lines.</td>
+</tr>
+<tr>
+<td>is_gift</td>
+<td>Boolean</td>
+<td>Whether or not this order should be placed as a gift. Typically, retailers will exclude the price of the items on the receipt if this is set.</td>
+</tr>
+<tr>
+<td>max_price</td>
+<td>Number</td>
+<td>The maximum price in cents for the order. If the final price exceeds this number, the order will not go through and will return a <code class="prettyprint">max_price_exceeded</code> error.</td>
+</tr>
+<tr>
+<td>webhooks</td>
+<td>Object</td>
+<td>A <a href="#webhooks-object">webhooks object</a> including URLs that will receive POST requests after particular events have finished</td>
+</tr>
+<tr>
+<td>client_notes</td>
+<td>Object</td>
+<td>Any metadata to store on the request for future use. This object will be passed back in the response.</td>
+</tr>
+<tr>
+<td>promo_codes</td>
+<td>Array</td>
+<td>(<code class="prettyprint">nordstrom</code> only). A list of promotion codes to use at checkout.</td>
+</tr>
+<tr>
+<td>ignore_invalid_promo_code</td>
+<td>Boolean</td>
+<td>(<code class="prettyprint">nordstrom</code> only). Continue with checkout even if promotion codes are invalid. Default is <code class="prettyprint">false</code>.</td>
+</tr>
+<tr>
+<td>po_number</td>
+<td>Number</td>
+<td>(<code class="prettyprint">amazon</code> business accounts only). Adds a purchase order number to the order.</td>
 </tr>
 </tbody></table>
 
-          <h1 id='errors'>Errors</h1>
-<p><aside class="notice">This error section is stored in a separate file in <code class="prettyprint">includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the <code class="prettyprint">includes</code> folder and add them to the top of your <code class="prettyprint">index.md</code>&rsquo;s frontmatter. Files are included in the order listed.</aside></p>
+<h2 id="retrieving-an-order">Retrieving an order</h2>
 
-<p>The Kittn API uses the following error codes:</p>
+<blockquote>
+<p>Example retrieve an order request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/3f1c939065cf58e7b9f0aea70640dffc"</span> <span class="se">\</span>
+  -u client_token:
+</code></pre>
+
+<p>To see the status of an order, you can retrieve it using the request id you obtained from your order request, and placing it in a GET request URL. Orders usually take a while to process. While your order is processing, the response will return an error with code type <code class="prettyprint">request_processing</code>.</p>
+
+<blockquote>
+<p>Example retrieve an order response (request processing)</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"_type"</span>: <span class="s2">"error"</span>,
+  <span class="s2">"code"</span>: <span class="s2">"request_processing"</span>,
+  <span class="s2">"message"</span>: <span class="s2">"Request is currently processing and will complete soon."</span>,
+  <span class="s2">"data"</span>: <span class="o">{}</span>
+<span class="o">}</span>
+</code></pre>
+
+<blockquote>
+<p>Example retrieve an order response (order response)</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"_type"</span> : <span class="s2">"order_response"</span>,
+  <span class="s2">"price_components"</span> : <span class="o">{</span>
+    <span class="s2">"shipping"</span> : 0,
+    <span class="s2">"subtotal"</span> : 1999,
+    <span class="s2">"tax"</span> : 0,
+    <span class="s2">"total"</span> : 1999
+  <span class="o">}</span>,
+  <span class="s2">"merchant_order_ids"</span> : <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">"merchant_order_id"</span> : <span class="s2">"112-1234567-7272727"</span>,
+      <span class="s2">"merchant"</span> : <span class="s2">"amazon"</span>,
+      <span class="s2">"account"</span> : <span class="s2">"timbeaver@gmail.com"</span>,
+      <span class="s2">"placed_at"</span> : ISODate<span class="o">(</span><span class="s2">"2014-07-02T23:51:08.366Z"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">]</span>,
+  <span class="s2">"tracking"</span> : <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">"product_id"</span> : <span class="s2">"0923568964"</span>,
+      <span class="s2">"merchant_order_id"</span> : <span class="s2">"112-1234567-7272727"</span>,
+      <span class="s2">"carrier"</span> : <span class="s2">"Fedex"</span>,
+      <span class="s2">"tracking_number"</span> : <span class="s2">"9261290100129790891234"</span>,
+      <span class="s2">"obtained_at"</span> : ISODate<span class="o">(</span><span class="s2">"2014-07-03T23:22:48.165Z"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">]</span>,
+  <span class="s2">"request"</span> : <span class="o">{</span>
+    ...
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>Once the request completes, the retrieve an order response should either return a response of type <code class="prettyprint">order_response</code> or <code class="prettyprint">error_response</code>. An error response body will contain a <code class="prettyprint">code</code> and a <code class="prettyprint">message</code>. The code indicates the error that occurred, while the message provides a more detailed description of the error. Any extra details about the error will be provided in the <code class="prettyprint">data</code> object. For a full list of errors, see the <a href="#errors">Errors section</a>.</p>
+
+<h3 id="order-response-attributes">Order response attributes</h3>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>price_components</td>
+<td>Object</td>
+<td>A <a href="#price-components-object">price components object</a> which contains details about the price of the final order</td>
+</tr>
+<tr>
+<td>merchant_order_ids</td>
+<td>Array</td>
+<td>A <a href="#merchant-order-ids-object">merchant order ids object</a> which contains details about the retailer&rsquo;s order identifiers</td>
+</tr>
+<tr>
+<td>tracking</td>
+<td>Array</td>
+<td>An array of <a href="#tracking-object">tracking objects</a> that contain the order&rsquo;s tracking information. In most cases, this field will not be populated immediately after the order is placed and will only be available later after tracking is updated by the retailer. Once tracking has been obtained, a POST request will be sent to the <code class="prettyprint">tracking_obtained</code> field of the <a href="#webhooks-object">webhooks object</a> from the request if set.</td>
+</tr>
+<tr>
+<td>request</td>
+<td>Object</td>
+<td>The original request that was sent to the Zinc API</td>
+</tr>
+</tbody></table>
+
+<h2 id="product-object">Product object</h2>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>product_id</td>
+<td>String</td>
+<td>The retailer&rsquo;s unique identifier for the product.</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>Number</td>
+<td>The number of products to purchase.</td>
+</tr>
+</tbody></table>
+
+<h2 id="address-object">Address object</h2>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>first_name</td>
+<td>String</td>
+<td>The first name of the addressee</td>
+</tr>
+<tr>
+<td>last_name</td>
+<td>String</td>
+<td>The last name of the addressee</td>
+</tr>
+<tr>
+<td>address_line1</td>
+<td>String</td>
+<td>The house number and street name</td>
+</tr>
+<tr>
+<td>address_line2</td>
+<td>String</td>
+<td>The suite, post office box, or apartment number (optional)</td>
+</tr>
+<tr>
+<td>zip_code</td>
+<td>String</td>
+<td>The zip code of the address</td>
+</tr>
+<tr>
+<td>city</td>
+<td>String</td>
+<td>The city of the address</td>
+</tr>
+<tr>
+<td>state</td>
+<td>String</td>
+<td>The USPS abbreviation for the state of the address (e.g. AK)</td>
+</tr>
+<tr>
+<td>country</td>
+<td>String</td>
+<td>The ISO abbreviation for the country of the address (e.g. US). A list of all available two-letter country codes can be found <a href="http://www.theodora.com/country_digraphs.html">here</a>.</td>
+</tr>
+<tr>
+<td>phone_number</td>
+<td>String</td>
+<td>The phone number associated with the address</td>
+</tr>
+</tbody></table>
+
+<h2 id="payment-method-object">Payment method object</h2>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name_on_card</td>
+<td>String</td>
+<td>The full name on the credit/debit card</td>
+</tr>
+<tr>
+<td>number</td>
+<td>String</td>
+<td>The credit/debit card number</td>
+</tr>
+<tr>
+<td>security_code</td>
+<td>String</td>
+<td>The card verification value on the back of the credit/debit card</td>
+</tr>
+<tr>
+<td>expiration_month</td>
+<td>Number</td>
+<td>The month of the expiration of the card (e.g. January is 1, February is 2)</td>
+</tr>
+<tr>
+<td>expiration_year</td>
+<td>Number</td>
+<td>The year of the expiration of the card (e.g. 2016)</td>
+</tr>
+<tr>
+<td>use_gift</td>
+<td>Boolean</td>
+<td>Whether or not to use the gift balance on the retailer account. If true, then the gift balance will first be used up completely before the card will be charged. Only works for retailers which support gift balance (<code class="prettyprint">amazon</code> and <code class="prettyprint">amazon_uk</code>).</td>
+</tr>
+</tbody></table>
+
+<h2 id="webhooks-object">Webhooks object</h2>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>order_placed</td>
+<td>String</td>
+<td>The webhook URL to send data to when an order is placed</td>
+</tr>
+<tr>
+<td>order_failed</td>
+<td>String</td>
+<td>The webhook URL to send data to when an order fails</td>
+</tr>
+<tr>
+<td>tracking_obtained</td>
+<td>String</td>
+<td>The webhook URL to send data to when tracking for an order is retrieved</td>
+</tr>
+</tbody></table>
+
+<h2 id="retailer-credentials-object">Retailer credentials object</h2>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>email</td>
+<td>String</td>
+<td>The email for the retailer account</td>
+</tr>
+<tr>
+<td>password</td>
+<td>String</td>
+<td>The password for the retailer account</td>
+</tr>
+</tbody></table>
+
+<h2 id="price-components-object">Price components object</h2>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>shipping</td>
+<td>Number</td>
+<td>The price for shipping</td>
+</tr>
+<tr>
+<td>gift_certificate</td>
+<td>Number</td>
+<td>The amount of value used on a gift certificate placed on the account</td>
+</tr>
+<tr>
+<td>subtotal</td>
+<td>Number</td>
+<td>The total price of the order before tax and other price adjustments</td>
+</tr>
+<tr>
+<td>tax</td>
+<td>Number</td>
+<td>The tax collected on the order</td>
+</tr>
+<tr>
+<td>total</td>
+<td>Number</td>
+<td>The total price paid for the order</td>
+</tr>
+</tbody></table>
+
+<h2 id="merchant-order-ids-object">Merchant order ids object</h2>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchant_order_id</td>
+<td>String</td>
+<td>The identifier provided by the retailer for the order that was placed</td>
+</tr>
+<tr>
+<td>merchant</td>
+<td>String</td>
+<td>The retailer on which the order was placed</td>
+</tr>
+<tr>
+<td>account</td>
+<td>String</td>
+<td>The account on which the order was placed</td>
+</tr>
+<tr>
+<td>placed_at</td>
+<td>Date</td>
+<td>The date and time at which the order was placed</td>
+</tr>
+</tbody></table>
+
+          <h1 id="products">Products</h1>
+
+<h2 id="get-product-details">Get product details</h2>
+
+<blockquote>
+<p>Example product details request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964?retailer<span class="o">=</span>amazon <span class="se">\</span>
+  -u client_token:
+</code></pre>
+
+<blockquote>
+<p>Example product details response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"product_description"</span>: <span class="s2">"This is a great book!"</span>,
+  <span class="s2">"retailer"</span>: <span class="s2">"amazon"</span>,
+  <span class="s2">"epids"</span>:[
+    <span class="o">{</span>
+      <span class="s2">"type"</span>: <span class="s2">"EAN"</span>,
+      <span class="s2">"value"</span>: <span class="s2">"9780923568962"</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">"type"</span>: <span class="s2">"ISBN"</span>,
+      <span class="s2">"value"</span>: <span class="s2">"0923568964"</span>
+    <span class="o">}</span>
+  <span class="o">]</span>,
+  <span class="s2">"product_details"</span>: <span class="o">[</span>
+    <span class="s2">"Series: The Easy Way!"</span>,
+    <span class="s2">"Paperback: 60 pages"</span>,
+    <span class="s2">"Publisher: XanEdu Publishing Inc; 2nd Edition edition (September 28, 2009)"</span>,
+    <span class="s2">"Language: English"</span>,
+    <span class="s2">"ISBN-10: 0923568964"</span>,
+    <span class="s2">"ISBN-13: 978-0923568962"</span>,
+    <span class="s2">"Product Dimensions: 8.3 x 5.3 x 0.2 inches"</span>,
+    <span class="s2">"Shipping Weight: 3.5 ounces"</span>
+  <span class="o">]</span>,
+  <span class="s2">"title"</span>: <span class="s2">"APA: The Easy Way! [Updated for APA 6th Edition]"</span>,
+  <span class="s2">"variant_specifics"</span>: <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">"dimension"</span>: <span class="s2">"Color"</span>,
+      <span class="s2">"value"</span>: <span class="s2">"Gray"</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">"dimension"</span>: <span class="s2">"Size"</span>,
+      <span class="s2">"value"</span>: <span class="s2">"Small/Medium"</span>
+    <span class="o">}</span>
+  <span class="o">]</span>,
+  <span class="s2">"product_id"</span>: <span class="s2">"0923568964"</span>
+<span class="o">}</span>
+</code></pre>
+
+<h3 id="product-detail-attributes">Product detail attributes</h3>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>product_description</td>
+<td>String</td>
+<td>The description of the product</td>
+</tr>
+<tr>
+<td>retailer</td>
+<td>String</td>
+<td>The retailer for the product</td>
+</tr>
+<tr>
+<td>epids</td>
+<td>Array</td>
+<td>Array of objects containing external product identifier (epid) objects. An epid object contains a <code class="prettyprint">type</code> field describing the name of the external product identifier and a <code class="prettyprint">value</code> field for the identifier&rsquo;s value.</td>
+</tr>
+<tr>
+<td>product_details</td>
+<td>Array</td>
+<td>An array of strings providing details about the product</td>
+</tr>
+<tr>
+<td>title</td>
+<td>String</td>
+<td>Title of the product</td>
+</tr>
+<tr>
+<td>variant_specifics</td>
+<td>Array</td>
+<td>Array of objects containing information about the types and values of product variants available. A variant specifics object contains a <code class="prettyprint">dimension</code> field describing the type of the variant (e.g. &ldquo;Color&rdquo;) and a <code class="prettyprint">value</code> field describing the specific value available.</td>
+</tr>
+<tr>
+<td>product_id</td>
+<td>String</td>
+<td>The retailer&rsquo;s unique identifier for the product</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-product-offers">Get product offers</h2>
+
+<blockquote>
+<p>Example product offers request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964/offers/retailer<span class="o">=</span>amazon <span class="se">\</span>
+  -u client_token:
+</code></pre>
+
+<blockquote>
+<p>Example product offers response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"retailer"</span>: <span class="s2">"amazon"</span>,
+  <span class="s2">"offers"</span>:[
+    <span class="o">{</span>
+      <span class="s2">"addon"</span>: <span class="nb">false</span>,
+      <span class="s2">"condition"</span>: <span class="s2">"New"</span>,
+      <span class="s2">"handling_days_max"</span>: 0,
+      <span class="s2">"handling_days_min"</span>: 0,
+      <span class="s2">"international"</span>: <span class="nb">false</span>,
+      <span class="s2">"merchant_id"</span>: <span class="s2">"ATVPDKIKX0DER"</span>,
+      <span class="s2">"offerlisting_id"</span>: <span class="s2">"lUai8vEbhC%2F2vYZDwaePlc4baWiHzAy9XJncUR%2FpQ9l4VOrs%2FfpYt4ZtreQaB%2BPL1xJwz5OpIc%2BJjyymHg3iv4YkZvWy5z7flil7n7lUDWNPY76YUhMNdw%3D%3D"</span>,
+      <span class="s2">"price"</span>: 9.79,
+      <span class="s2">"ship_price"</span>: 0
+      <span class="s2">"prime"</span>: <span class="nb">true</span>,
+      <span class="s2">"prime_only"</span>: <span class="nb">false</span>,
+      <span class="s2">"seller_name"</span>: <span class="s2">"Amazon.com"</span>,
+      <span class="s2">"seller_num_ratings"</span>: 1000000,
+      <span class="s2">"seller_percent_positive"</span>: 100,
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+</code></pre>
+
+<h3 id="product-offers-attributes">Product offers attributes</h3>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>retailer</td>
+<td>String</td>
+<td>The retailer for the product offers</td>
+</tr>
+<tr>
+<td>offers</td>
+<td>Array</td>
+<td>An array of <a href="#product-offer-object">product offer objects</a> for a particular product on a retailer</td>
+</tr>
+</tbody></table>
+
+<h2 id="product-offer-object">Product offer object</h2>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>addon</td>
+<td>Boolean</td>
+<td>Whether or not the product is an addon item that can only be purchased in a bundle</td>
+</tr>
+<tr>
+<td>condition</td>
+<td>String</td>
+<td>The condition of the product. Possible values are <code class="prettyprint">New</code>, <code class="prettyprint">Refurbished</code>, <code class="prettyprint">Used - Like New</code>, <code class="prettyprint">Used - Very Good</code>, <code class="prettyprint">Used - Good</code>, <code class="prettyprint">Used - Acceptable</code>, <code class="prettyprint">Unacceptable</code>.</td>
+</tr>
+<tr>
+<td>handling_days_max</td>
+<td>Number</td>
+<td>The maximum number of days required for shipping and handling</td>
+</tr>
+<tr>
+<td>handling_days_min</td>
+<td>Number</td>
+<td>The minimum number of days required for shipping and handling</td>
+</tr>
+<tr>
+<td>international</td>
+<td>Boolean</td>
+<td>Whether or not the product ships from outside of the United States</td>
+</tr>
+<tr>
+<td>merchant_id</td>
+<td>String</td>
+<td>The merchant&rsquo;s unique identifier for the product</td>
+</tr>
+<tr>
+<td>offerlisting_id</td>
+<td>String</td>
+<td>(<code class="prettyprint">amazon</code> and <code class="prettyprint">amazon_uk</code> only). The unique identifier that identifies an item sold by any merchant on Amazon</td>
+</tr>
+<tr>
+<td>price</td>
+<td>Number</td>
+<td>The price of the item, not including shipping</td>
+</tr>
+<tr>
+<td>ship_price</td>
+<td>Number</td>
+<td>The price of the shipping for the item</td>
+</tr>
+<tr>
+<td>prime</td>
+<td>Boolean</td>
+<td>(<code class="prettyprint">amazon</code> and <code class="prettyprint">amazon_uk</code> only). Whether or not the product ships using Amazon Prime</td>
+</tr>
+<tr>
+<td>prime_only</td>
+<td>Boolean</td>
+<td>(<code class="prettyprint">amazon</code> and <code class="prettyprint">amazon_uk</code> only). Whether or not the product only ships using Amazon Prime</td>
+</tr>
+<tr>
+<td>seller_name</td>
+<td>String</td>
+<td>The name of the seller of the current offer</td>
+</tr>
+<tr>
+<td>seller_num_ratings</td>
+<td>Number</td>
+<td>The number of ratings that tha seller has accumulated</td>
+</tr>
+<tr>
+<td>seller_percent_positive</td>
+<td>Number</td>
+<td>Number between 0 and 100 denoting the percentage of positive ratings the seller has received</td>
+</tr>
+</tbody></table>
+
+          <h1 id="errors">Errors</h1>
+
+<blockquote>
+<p>Example error response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"_type"</span>: <span class="s2">"error"</span>,
+  <span class="s2">"code"</span>: <span class="s2">"product_unavailable"</span>,
+  <span class="s2">"message"</span>: <span class="s2">"One of the products you selected is unavailable."</span>,
+  <span class="s2">"data"</span>: <span class="o">{</span><span class="s1">'product_id'</span>: <span class="s1">'018293801'</span><span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>If there is an error processing a request, the result endpoint will return an error object containing three fields: <code class="prettyprint">code</code>, <code class="prettyprint">message</code>, and <code class="prettyprint">data</code>.</p>
+
+<p>The <code class="prettyprint">code</code> field provides a short, unique error code describing the error situation. The <code class="prettyprint">message</code> field provides a human readable message describing the error and is intended for the developer and not the end user. The <code class="prettyprint">data</code> field contains specific information related to the error (for example, the maximum quantity allowed and the desired quantity would be shown for a <code class="prettyprint">max_quantity_exceeded</code> error).</p>
+
+<p>The Zinc API uses the following errors:</p>
 
 <table><thead>
 <tr>
@@ -199,48 +815,108 @@ Remember — a happy kitten is an authenticated kitten!
 </tr>
 </thead><tbody>
 <tr>
-<td>400</td>
-<td>Bad Request &ndash; Your request sucks</td>
+<td>invalid_json</td>
+<td>The JSON in your request could not be parsed.</td>
 </tr>
 <tr>
-<td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
+<td>internal_error</td>
+<td>Zinc or the retailer you requested is experiencing outages. Please try again or contact support@zinc.io if this error persists.</td>
 </tr>
 <tr>
-<td>403</td>
-<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+<td>invalid_client_token</td>
+<td>Your client token is invalid.</td>
 </tr>
 <tr>
-<td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
+<td>product_unavailable</td>
+<td>The product_id you used is being phased out by the retailer &ndash; please update your product_id database accordingly. (On Amazon, this means that the offers page at [amazon_domain]/gp/offer-listing/[your_ASIN] has a more recent ASIN for that same product).</td>
 </tr>
 <tr>
-<td>405</td>
-<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+<td>request_processing</td>
+<td>Request is currently processing and will complete soon.</td>
 </tr>
 <tr>
-<td>406</td>
-<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+<td>invalid_request_id</td>
+<td>The provided request_id is invalid.</td>
 </tr>
 <tr>
-<td>410</td>
-<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+<td>invalid_request</td>
+<td>Validation failed on the request.</td>
 </tr>
 <tr>
-<td>418</td>
-<td>I&rsquo;m a teapot</td>
+<td>max_quantity_exceeded</td>
+<td>You have exceeded the maximum quantity available for a specific product.</td>
 </tr>
 <tr>
-<td>429</td>
-<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slown down!</td>
+<td>invalid_shipping_method</td>
+<td>The shipping method you selected was not valid.</td>
 </tr>
 <tr>
-<td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
+<td>shipping_address_refused</td>
+<td>The shipping address you provided was refused by the retailer.</td>
 </tr>
 <tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
+<td>billing_address_refused</td>
+<td>The billing address you provided was refused by the retailer.</td>
+</tr>
+<tr>
+<td>credit_card_declined</td>
+<td>The credit card you entered was declined.</td>
+</tr>
+<tr>
+<td>invalid_security_code</td>
+<td>The security code you entered was declined.</td>
+</tr>
+<tr>
+<td>invalid_card_number</td>
+<td>The credit card number you entered is not valid.</td>
+</tr>
+<tr>
+<td>brand_not_accepted</td>
+<td>Your credit card brand is not accepted with this merchant.</td>
+</tr>
+<tr>
+<td>invalid_login_credentials</td>
+<td>The email and password you entered were incorrect.</td>
+</tr>
+<tr>
+<td>duplicate_order</td>
+<td>This order is a duplicate.</td>
+</tr>
+<tr>
+<td>add_on_item</td>
+<td>Add-on items cannot be ordered individually.</td>
+</tr>
+<tr>
+<td>invalid_promo_code</td>
+<td>One of the promotion code you entered was not valid.</td>
+</tr>
+<tr>
+<td>no_two_day_shipping</td>
+<td>Two day shipping (or faster) is not available for the item(s) you selected.</td>
+</tr>
+<tr>
+<td>no_free_shipping</td>
+<td>Free shipping is not available for the item(s) you selected.</td>
+</tr>
+<tr>
+<td>invalid_quantity</td>
+<td>The quantity for one of the products does not match the one available on the retailer.</td>
+</tr>
+<tr>
+<td>additional_information_required</td>
+<td>The retailer asked for additional account verification questions. If using the API, please add a field &lsquo;phone_number&rsquo; in the billing address that matches your billing telephone number.</td>
+</tr>
+<tr>
+<td>payment_info_problem</td>
+<td>There was a problem with your payment information (likely not enough gift balance).</td>
+</tr>
+<tr>
+<td>expired_product_id</td>
+<td>The product_id you used is no longer supported by the retailer.</td>
+</tr>
+<tr>
+<td>insufficient_variants</td>
+<td>You did not select all required variants for a product.</td>
 </tr>
 </tbody></table>
 
@@ -248,8 +924,6 @@ Remember — a happy kitten is an authenticated kitten!
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="ruby">ruby</a>
-                <a href="#" data-language-name="python">python</a>
           </div>
       </div>
     </div>
