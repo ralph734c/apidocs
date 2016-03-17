@@ -143,7 +143,7 @@
 <p>Example create an order request</p>
 </blockquote>
 <pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders"</span> <span class="se">\</span>
-  -u client_token: <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
   -d <span class="s1">'{
   "retailer": "amazon",
   "products": [
@@ -319,7 +319,7 @@
 <p>Example retrieve an order request</p>
 </blockquote>
 <pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/3f1c939065cf58e7b9f0aea70640dffc"</span> <span class="se">\</span>
-  -u client_token:
+  -u &lt;client_token&gt;:
 </code></pre>
 
 <p>To see the status of an order, you can retrieve it using the request id you obtained from your order request, and placing it in a GET request URL. Orders usually take a while to process. While your order is processing, the response will return an error with code type <code class="prettyprint">request_processing</code>.</p>
@@ -410,7 +410,7 @@
 <p>Example product details request</p>
 </blockquote>
 <pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964?retailer<span class="o">=</span>amazon <span class="se">\</span>
-  -u client_token:
+  -u &lt;client_token&gt;:
 </code></pre>
 
 <h3 id="product-detail-request-attributes">Product detail request attributes</h3>
@@ -528,7 +528,7 @@
 <p>Example product offers request</p>
 </blockquote>
 <pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964/offers?retailer<span class="o">=</span>amazon <span class="se">\</span>
-  -u client_token:
+  -u &lt;client_token&gt;:
 </code></pre>
 
 <h3 id="product-offers-request-attributes">Product offers request attributes</h3>
@@ -604,7 +604,7 @@
 <p>Example authentication request</p>
 </blockquote>
 <pre class="highlight shell"><code>curl https://api.zinc.io/v1/orders <span class="se">\</span>
-  -H client_token:
+  -H &lt;client_token&gt;:
 </code></pre>
 
 <p>You can authenticate your account by including your client token in your request. Authentication is performed through HTTP Basic Auth, where the client token is the basic auth username value. You do not need to provide a password.</p>
