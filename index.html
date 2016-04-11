@@ -133,6 +133,19 @@
 </tr>
 </tbody></table>
 
+          <h1 id="authentication">Authentication</h1>
+
+<blockquote>
+<p>Example authentication request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl https://api.zinc.io/v1/orders <span class="se">\</span>
+  -H &lt;client_token&gt;:
+</code></pre>
+
+<p>You can authenticate your account by including your client token in your request. Authentication is performed through HTTP Basic Auth, where the client token is the basic auth username value. You do not need to provide a password.</p>
+
+<p>Make sure that you don&rsquo;t share your client token and that you keep it away from publicly accessible areas such as Github, client-side code, etc. Client tokens are tied to your account, so you will be charged for any orders or requests made with your client token. If you believe your client token has been compromised, please contact support@zinc.io immediately.</p>
+
           <h1 id="place-an-order">Place an order</h1>
 
 <h2 id="create-an-order">Create an order</h2>
@@ -597,19 +610,6 @@
 <td>An array of <a href="#product-offer-object">product offer objects</a> for a particular product on a retailer</td>
 </tr>
 </tbody></table>
-
-          <h1 id="authentication">Authentication</h1>
-
-<blockquote>
-<p>Example authentication request</p>
-</blockquote>
-<pre class="highlight shell"><code>curl https://api.zinc.io/v1/orders <span class="se">\</span>
-  -H &lt;client_token&gt;:
-</code></pre>
-
-<p>You can authenticate your account by including your client token in your request. Authentication is performed through HTTP Basic Auth, where the client token is the basic auth username value. You do not need to provide a password.</p>
-
-<p>Make sure that you don&rsquo;t share your client token and that you keep it away from publicly accessible areas such as Github, client-side code, etc. Client tokens are tied to your account, so you will be charged for any orders or requests made with your client token. If you believe your client token has been compromised, please contact support@zinc.io immediately.</p>
 
           <h1 id="object-reference">Object reference</h1>
 
