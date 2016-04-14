@@ -1063,16 +1063,132 @@
 </tr>
 </thead><tbody>
 <tr>
-<td>invalid_json</td>
-<td>The JSON in your request could not be parsed.</td>
+<td>add_on_item</td>
+<td>Add-on items cannot be ordered individually.</td>
+</tr>
+<tr>
+<td>additional_information_required</td>
+<td>The retailer asked for additional account verification questions. If using the API, please add a field &lsquo;phone_number&rsquo; in the billing address that matches your billing telephone number.</td>
+</tr>
+<tr>
+<td>billing_address_refused</td>
+<td>The billing address you provided was refused by the retailer.</td>
+</tr>
+<tr>
+<td>brand_not_accepted</td>
+<td>Your credit card brand is not accepted with this merchant.</td>
+</tr>
+<tr>
+<td>credit_card_declined</td>
+<td>The credit card you entered was declined.</td>
+</tr>
+<tr>
+<td>duplicate_order</td>
+<td>This order is a duplicate.</td>
+</tr>
+<tr>
+<td>expired_product_id</td>
+<td>The product_id you used is no longer supported by the retailer.</td>
+</tr>
+<tr>
+<td>insufficient_variants</td>
+<td>You did not select all required variants for a product.</td>
 </tr>
 <tr>
 <td>internal_error</td>
 <td>Zinc or the retailer you requested is experiencing outages. Please try again or contact support@zinc.io if this error persists.</td>
 </tr>
 <tr>
+<td>invalid_card_number</td>
+<td>The credit card number you entered is not valid.</td>
+</tr>
+<tr>
 <td>invalid_client_token</td>
 <td>Your client token is invalid.</td>
+</tr>
+<tr>
+<td>invalid_expiration_date</td>
+<td>The expiration date on your credit card is not valid.</td>
+</tr>
+<tr>
+<td>invalid_gift_options</td>
+<td>The gift options you provided were rejected by the retailer.</td>
+</tr>
+<tr>
+<td>invalid_json</td>
+<td>The JSON in your request could not be parsed.</td>
+</tr>
+<tr>
+<td>invalid_login_credentials</td>
+<td>The email and password you entered were incorrect.</td>
+</tr>
+<tr>
+<td>invalid_payment_method</td>
+<td>The payment method provided is not available on the retailer.</td>
+</tr>
+<tr>
+<td>invalid_promo_code</td>
+<td>One of the promotion code you entered was not valid.</td>
+</tr>
+<tr>
+<td>invalid_quantity</td>
+<td>The quantity for one of the products does not match the one available on the retailer.</td>
+</tr>
+<tr>
+<td>invalid_request</td>
+<td>Validation failed on the request.</td>
+</tr>
+<tr>
+<td>invalid_request_id</td>
+<td>The provided request_id is invalid.</td>
+</tr>
+<tr>
+<td>invalid_security_code</td>
+<td>The security code you entered was declined.</td>
+</tr>
+<tr>
+<td>invalid_shipping_method</td>
+<td>The shipping method you selected was not valid.</td>
+</tr>
+<tr>
+<td>invalid_variant</td>
+<td>One of the product variants you provided was not valid.</td>
+</tr>
+<tr>
+<td>manual_review_required</td>
+<td>This order is under manual review by Zinc &ndash; please check back later for the status of this order.</td>
+</tr>
+<tr>
+<td>max_price_exceeded</td>
+<td>The retailers final price exceeds the maximum price.</td>
+</tr>
+<tr>
+<td>max_quantity_exceeded</td>
+<td>You have exceeded the maximum quantity available for a specific product.</td>
+</tr>
+<tr>
+<td>no_free_shipping</td>
+<td>Free shipping is not available for the item(s) you selected.</td>
+</tr>
+<tr>
+<td>no_gift_shipping</td>
+<td>No gift shipping was available on this order.</td>
+</tr>
+<tr>
+<td>no_two_day_shipping</td>
+<td>Two day shipping (or faster) is not available for the item(s) you selected.</td>
+</tr>
+<tr>
+<td>order_probably_placed</td>
+<td>This order was probably placed, but we were not able to retrieve the merchant order ids.</td>
+</tr>
+<tr>
+<td>payment_info_problem</td>
+<td>There was a problem with your payment information (likely not enough gift balance).</td>
+</tr>
+<tr>
+<td>prime_pantry_not_supported</td>
+<td>Purchasing Prime Pantry items is not supported by the Zinc API.</td>
 </tr>
 <tr>
 <td>product_unavailable</td>
@@ -1083,88 +1199,20 @@
 <td>Request is currently processing and will complete soon.</td>
 </tr>
 <tr>
-<td>invalid_request_id</td>
-<td>The provided request_id is invalid.</td>
-</tr>
-<tr>
-<td>invalid_request</td>
-<td>Validation failed on the request.</td>
-</tr>
-<tr>
-<td>max_quantity_exceeded</td>
-<td>You have exceeded the maximum quantity available for a specific product.</td>
-</tr>
-<tr>
-<td>invalid_shipping_method</td>
-<td>The shipping method you selected was not valid.</td>
-</tr>
-<tr>
 <td>shipping_address_refused</td>
 <td>The shipping address you provided was refused by the retailer.</td>
 </tr>
 <tr>
-<td>billing_address_refused</td>
-<td>The billing address you provided was refused by the retailer.</td>
+<td>shipping_address_unavailable</td>
+<td>The item(s) cannot be shipped to the selected shipping address.</td>
 </tr>
 <tr>
-<td>credit_card_declined</td>
-<td>The credit card you entered was declined.</td>
+<td>shipping_method_unavailable</td>
+<td>The selected shipping_method is not available for the selected shipping_address.</td>
 </tr>
 <tr>
-<td>invalid_security_code</td>
-<td>The security code you entered was declined.</td>
-</tr>
-<tr>
-<td>invalid_card_number</td>
-<td>The credit card number you entered is not valid.</td>
-</tr>
-<tr>
-<td>brand_not_accepted</td>
-<td>Your credit card brand is not accepted with this merchant.</td>
-</tr>
-<tr>
-<td>invalid_login_credentials</td>
-<td>The email and password you entered were incorrect.</td>
-</tr>
-<tr>
-<td>duplicate_order</td>
-<td>This order is a duplicate.</td>
-</tr>
-<tr>
-<td>add_on_item</td>
-<td>Add-on items cannot be ordered individually.</td>
-</tr>
-<tr>
-<td>invalid_promo_code</td>
-<td>One of the promotion code you entered was not valid.</td>
-</tr>
-<tr>
-<td>no_two_day_shipping</td>
-<td>Two day shipping (or faster) is not available for the item(s) you selected.</td>
-</tr>
-<tr>
-<td>no_free_shipping</td>
-<td>Free shipping is not available for the item(s) you selected.</td>
-</tr>
-<tr>
-<td>invalid_quantity</td>
-<td>The quantity for one of the products does not match the one available on the retailer.</td>
-</tr>
-<tr>
-<td>additional_information_required</td>
-<td>The retailer asked for additional account verification questions. If using the API, please add a field &lsquo;phone_number&rsquo; in the billing address that matches your billing telephone number.</td>
-</tr>
-<tr>
-<td>payment_info_problem</td>
-<td>There was a problem with your payment information (likely not enough gift balance).</td>
-</tr>
-<tr>
-<td>expired_product_id</td>
-<td>The product_id you used is no longer supported by the retailer.</td>
-</tr>
-<tr>
-<td>insufficient_variants</td>
-<td>You did not select all required variants for a product.</td>
+<td>unauthorized_access</td>
+<td>You are not authorized to make this API call. Please contact support@zinc.io.</td>
 </tr>
 </tbody></table>
 
