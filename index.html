@@ -626,7 +626,12 @@
       <span class="s2">"dimension"</span>: <span class="s2">"color"</span>,
       <span class="s2">"value"</span>: <span class="s2">"Red"</span>,
     <span class="o">}</span>
-  <span class="o">]</span>
+  <span class="o">]</span>,
+  <span class="s2">"seller_selection_criteria"</span>: <span class="o">{</span>
+    <span class="s2">"prime"</span>: <span class="nb">true</span>,
+    <span class="s2">"handling_days_max"</span>: 6,
+    <span class="s2">"condition_in"</span>: <span class="o">[</span><span class="s2">"New"</span><span class="o">]</span>,
+  <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
 
@@ -651,6 +656,94 @@
 <td>variants</td>
 <td>Array</td>
 <td>An array of variant objects containing information about the types of values of a specific product variant to select. A variant contains <code class="prettyprint">dimension</code> field describing the type of the variant (e.g. &ldquo;color&rdquo; or &ldquo;size&rdquo;) and a <code class="prettyprint">value</code> field describing the specific value to select.</td>
+</tr>
+<tr>
+<td>seller_selection_criteria</td>
+<td>Object</td>
+<td>A <a href="#seller-selection-criteria-object">seller selection criteria</a> object containing information about which offers to choose when there are multiple offers available. If not provided, the seller selection criteria will default to <code class="prettyprint">&quot;prime&quot;: true</code>, <code class="prettyprint">&quot;handling_days_max&quot;: 6</code>, and <code class="prettyprint">&quot;condition_in&quot;: [&quot;New&quot;]</code>.</td>
+</tr>
+</tbody></table>
+
+<h2 id="seller-selection-criteria-object">Seller selection criteria object</h2>
+
+<blockquote>
+<p>Example seller selection criteria object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"addon"</span>: <span class="nb">false</span>,
+  <span class="s2">"condition_in"</span>: <span class="o">[</span><span class="s2">"New"</span><span class="o">]</span>,
+  <span class="s2">"handling_days_max"</span>: 6,
+  <span class="s2">"max_item_price"</span>: 5350
+  <span class="s2">"min_seller_num_ratings"</span>: 100,
+  <span class="s2">"prime"</span>: <span class="nb">true</span>,
+<span class="o">}</span>
+</code></pre>
+
+<p>Seller selection criteria allow you to filter multiple offers for a product from a retailer. They give you fine grained control when a retailer has multiple offers for a single product. This happens frequently when third party or affiliated merchants are selling on a platform, such as o Amazon.</p>
+
+<p>The seller selection criteria serve as a series of optional filters to narrow down the potential set of offers to something reasonable. After all the filters have been applied, Zinc will select the cheapest offer that is still available. For example, if <code class="prettyprint">&quot;handling_days_max&quot;: 6</code> is applied, then the Zinc API will order the cheapest offer where the shipping will arrive in 6 days or less.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>addon</td>
+<td>Boolean</td>
+<td>(Amazon only) Specifies whether the selected offer should be an addon item</td>
+</tr>
+<tr>
+<td>buy_box</td>
+<td>Boolean</td>
+<td>(Amazon only) Specifies whether the selected offer should be Amazon&rsquo;s default buy box offer</td>
+</tr>
+<tr>
+<td>condition_in</td>
+<td>Array</td>
+<td>An array of item conditions that the Zinc API must order from</td>
+</tr>
+<tr>
+<td>condition_not_in</td>
+<td>Array</td>
+<td>An array of item conditions that the Zinc API must not order from</td>
+</tr>
+<tr>
+<td>handling_days_max</td>
+<td>Number</td>
+<td>The maximum number of allowable days for shipping and handling</td>
+</tr>
+<tr>
+<td>international</td>
+<td>Boolean</td>
+<td>Specifies whether the item should come from an international supplier</td>
+</tr>
+<tr>
+<td>max_item_price</td>
+<td>Number</td>
+<td>The maximum allowable price in cents for an item</td>
+</tr>
+<tr>
+<td>merchant_id_in</td>
+<td>Array</td>
+<td>An array of merchant ids that the Zinc API must order from</td>
+</tr>
+<tr>
+<td>merchant_id_not_in</td>
+<td>Array</td>
+<td>An array of merchant ids that the Zinc API must not order from</td>
+</tr>
+<tr>
+<td>min_seller_num_ratings</td>
+<td>Number</td>
+<td>(Amazon only) The minimum number of ratings required for an Amazon seller&rsquo;s offer to be selected</td>
+</tr>
+<tr>
+<td>prime</td>
+<td>Boolean</td>
+<td>(Amazon only) Specifies whether the selected offer should be an Amazon Prime offer</td>
 </tr>
 </tbody></table>
 
