@@ -881,7 +881,8 @@
 <pre class="highlight shell"><code><span class="o">{</span>
   <span class="s2">"order_placed"</span>: <span class="s2">"http://mywebsite.com/zinc/order_placed"</span>,
   <span class="s2">"order_failed"</span>: <span class="s2">"http://mywebsite.com/zinc/order_failed"</span>,
-  <span class="s2">"tracking_obtained"</span>: <span class="s2">"http://mywebsite.com/zinc/tracking_obtained"</span>
+  <span class="s2">"tracking_obtained"</span>: <span class="s2">"http://mywebsite.com/zinc/tracking_obtained"</span>,
+  <span class="s2">"status_updated"</span>: <span class="s2">"http://mywebsite.com/zinc/status_updated"</span>
 <span class="o">}</span>
 </code></pre>
 
@@ -906,6 +907,11 @@
 <td>tracking_obtained</td>
 <td>String</td>
 <td>The webhook URL to send data to when tracking for an order is retrieved</td>
+</tr>
+<tr>
+<td>status_updated</td>
+<td>String</td>
+<td>The webhook URL to send data to when the status of a request is updated</td>
 </tr>
 </tbody></table>
 
