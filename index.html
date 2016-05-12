@@ -324,6 +324,11 @@
 <td>Number</td>
 <td>(<code class="prettyprint">amazon</code> business accounts only). Adds a purchase order number to the order.</td>
 </tr>
+<tr>
+<td>bundle</td>
+<td>Boolean</td>
+<td>(<code class="prettyprint">amazon</code> only). If enabled, orders will be grouped together into batches and placed together. See the <a href="#order-bundling">order bundling</a> section for more details.</td>
+</tr>
 </tbody></table>
 
 <h2 id="retrieving-an-order">Retrieving an order</h2>
@@ -414,6 +419,19 @@
 <td>The original request that was sent to the Zinc API</td>
 </tr>
 </tbody></table>
+
+<h2 id="order-bundling">Order bundling</h2>
+
+<p>The bundling feature groups orders together before placing them. This is often advantageous on retailers where larger orders are given free shipping. To use bundling, you only need to specify <code class="prettyprint">bundled: true</code> when placing an order request. Bundling currently only works on the following retailers: <code class="prettyprint">amazon</code>, <code class="prettyprint">amazon_uk</code>, <code class="prettyprint">amazon_ca</code>.</p>
+
+<p>The bundling feature allows you to take advantage of free shipping over $50 (on Amazon) without having to change your Zinc integration. Bundling will take the shipping addresses, products, and quantities from separate orders and will group them together into a single order, making sure that each product is routed correctly. The order requests and responses remain exactly the same. The only difference is when the order is placed. The order bundling feature will wait for enough orders in the queue before launching a bundled order. The exact dynamics are as follows:</p>
+
+<ol>
+<li>The order bundler will wait until $55 in products have been purchased. As soon as more than $55 of products from orders with <code class="prettyprint">bundled: true</code> have been queued, the bundler will launch a new order.</li>
+<li>If the order bundler has waited for longer than 6 hours and has not yet obtained $55 in products, it will launch an order with whatever products are currently in the queue.</li>
+</ol>
+
+<p>Note that the order bundler will not group together two orders which have the same product ids.</p>
 
           <h1 id="get-product-details">Get product details</h1>
 
