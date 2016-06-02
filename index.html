@@ -161,7 +161,7 @@
   "retailer": "amazon",
   "products": [
     {
-      "product_id": "0923568964", 
+      "product_id": "0923568964",
       "quantity": 1,
       "variants": [
         {
@@ -312,7 +312,7 @@
 <tr>
 <td>promo_codes</td>
 <td>Array</td>
-<td>(<code class="prettyprint">nordstrom</code> only). A list of promotion codes to use at checkout.</td>
+<td>A list of promotion codes to use at checkout.</td>
 </tr>
 <tr>
 <td>ignore_invalid_promo_code</td>
@@ -422,7 +422,7 @@
 
 <h2 id="order-bundling">Order bundling</h2>
 
-<p>The bundling feature groups orders together before placing them. This is often advantageous on retailers where larger orders are given free shipping. To use bundling, you only need to specify <code class="prettyprint">bundled: true</code> when placing an order request. Bundling currently only works on the following retailers: <code class="prettyprint">amazon</code>, <code class="prettyprint">amazon_uk</code>, <code class="prettyprint">amazon_ca</code>.</p>
+<p>The bundling feature groups orders together before placing them. This is often advantageous on retailers where larger orders are given free shipping. To use bundling, you only need to specify <code class="prettyprint">bundled: true</code> when placing an order request. Bundling currently only works on the following retailers: <code class="prettyprint">amazon</code>, <code class="prettyprint">amazon_uk</code>.</p>
 
 <p>The bundling feature allows you to take advantage of free shipping over $50 (on Amazon) without having to change your Zinc integration. Bundling will take the shipping addresses, products, and quantities from separate orders and will group them together into a single order, making sure that each product is routed correctly. The order requests and responses remain exactly the same. The only difference is when the order is placed. The order bundling feature will wait for enough orders in the queue before launching a bundled order. The exact dynamics are as follows:</p>
 
