@@ -894,6 +894,10 @@
 <span class="o">}</span>
 </code></pre>
 
+<p>The recommended way to pay for purchases on a retailer is by using gift card balance already applied to an account. Gift cards are supported on <code class="prettyprint">amazon</code>, <code class="prettyprint">amazon_uk</code>, <code class="prettyprint">amazon_ca</code>, and <code class="prettyprint">walmart</code>. To use the existing gift balance on the account, simply pass <code class="prettyprint">{&quot;use_gift&quot;: true}</code> as the payment method object.</p>
+
+<p>To use a credit card, you must include the <code class="prettyprint">name_on_card</code>, <code class="prettyprint">number</code>, <code class="prettyprint">security_code</code>, <code class="prettyprint">expiration_month</code>, and <code class="prettyprint">expiration_year</code> fields. For Amazon, you should only have a single credit card associated with an account which should be the same as the card passed in the payment method object. This allows the system to correctly answer any payment-related security questions.</p>
+
 <table><thead>
 <tr>
 <th>Attribute</th>
