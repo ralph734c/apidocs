@@ -486,7 +486,7 @@
 <tr>
 <td>async</td>
 <td>Boolean</td>
-<td>Determines whether the resulting response will be asynchronous. If set to <code class="prettyprint">true</code>, then the API will not block waiting for a result. Instead, it will return <code class="prettyprint">status: &quot;processing&quot;</code> as soon as possible and you will be responsible for sending another HTTP request and wait until <code class="prettyprint">status</code> is no longer processing. Defaults to <code class="prettyprint">false</code>.</td>
+<td>Determines whether the resulting response will be asynchronous. If set to <code class="prettyprint">true</code>, then the API will not block waiting for a result. Instead, it will immediately return <code class="prettyprint">status: &quot;processing&quot;</code> and you will be responsible for resending the request until the response is no longer <code class="prettyprint">status: &quot;processing&quot;</code>. Defaults to <code class="prettyprint">false</code>.</td>
 </tr>
 </tbody></table>
 
@@ -544,7 +544,7 @@
 <tr>
 <td>status</td>
 <td>String</td>
-<td>Possible values are <code class="prettyprint">processing</code>, <code class="prettyprint">failed</code>, or <code class="prettyprint">completed</code>. You will only see <code class="prettyprint">processing</code> if <code class="prettyprint">async: true</code> was set on the <code class="prettyprint">request</code>.</td>
+<td>Possible values are <code class="prettyprint">processing</code>, <code class="prettyprint">failed</code>, or <code class="prettyprint">completed</code>. You will only see <code class="prettyprint">processing</code> if <code class="prettyprint">async: true</code> was set on the request.</td>
 </tr>
 <tr>
 <td>product_description</td>
@@ -636,7 +636,7 @@
 <tr>
 <td>async</td>
 <td>Boolean</td>
-<td>Determines whether the resulting response will be asynchronous. If set to <code class="prettyprint">true</code>, then the API will not block waiting for a result. Instead, it will return <code class="prettyprint">status: &quot;processing&quot;</code> as soon as possible and you will be responsible for sending another HTTP request and wait until <code class="prettyprint">status</code> is no longer processing. Defaults to <code class="prettyprint">false</code>.</td>
+<td>Determines whether the resulting response will be asynchronous. If set to <code class="prettyprint">true</code>, then the API will not block waiting for a result. Instead, it will immediately return <code class="prettyprint">status: &quot;processing&quot;</code> and you will be responsible for resending the request until the response is no longer <code class="prettyprint">status: &quot;processing&quot;</code>. Defaults to <code class="prettyprint">false</code>.</td>
 </tr>
 </tbody></table>
 
@@ -679,7 +679,7 @@
 <tr>
 <td>status</td>
 <td>String</td>
-<td>Possible values are <code class="prettyprint">processing</code>, <code class="prettyprint">failed</code>, or <code class="prettyprint">completed</code>. You will only see <code class="prettyprint">processing</code> if <code class="prettyprint">async: true</code> was set on the <code class="prettyprint">request</code>.</td>
+<td>Possible values are <code class="prettyprint">processing</code>, <code class="prettyprint">failed</code>, or <code class="prettyprint">completed</code>. You will only see <code class="prettyprint">processing</code> if <code class="prettyprint">async: true</code> was set on the request.</td>
 </tr>
 <tr>
 <td>retailer</td>
