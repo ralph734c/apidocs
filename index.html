@@ -483,6 +483,11 @@
 <td>Number</td>
 <td>A timestamp setting the minimum time the response should be retrieved from. The data returned in the response will be newer this timestamp. Cannot specify with <code class="prettyprint">max_age</code>.</td>
 </tr>
+<tr>
+<td>async</td>
+<td>Boolean</td>
+<td>Determines whether the resulting response will be asynchronous. If set to <code class="prettyprint">true</code>, then the API will not block waiting for a result. Instead, it will return <code class="prettyprint">status: &quot;processing&quot;</code> as soon as possible and you will be responsible for sending another HTTP request and wait until <code class="prettyprint">status</code> is no longer processing. Defaults to <code class="prettyprint">false</code>.</td>
+</tr>
 </tbody></table>
 
 <blockquote>
@@ -535,6 +540,11 @@
 <th>Description</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>status</td>
+<td>String</td>
+<td>Can be one of <code class="prettyprint">processing</code>, <code class="prettyprint">failed</code>, or <code class="prettyprint">completed</code>. Will only see <code class="prettyprint">processing</code> if <code class="prettyprint">async</code> was set to <code class="prettyprint">true</code> on the request.</td>
+</tr>
 <tr>
 <td>product_description</td>
 <td>String</td>
@@ -622,6 +632,11 @@
 <td>Number</td>
 <td>A timestamp setting the minimum time the response should be retrieved from. The data returned in the response will be newer this timestamp. Cannot specify with <code class="prettyprint">max_age</code>.</td>
 </tr>
+<tr>
+<td>async</td>
+<td>Boolean</td>
+<td>Determines whether the resulting response will be asynchronous. If set to <code class="prettyprint">true</code>, then the API will not block waiting for a result. Instead, it will return <code class="prettyprint">status: &quot;processing&quot;</code> as soon as possible and you will be responsible for sending another HTTP request and wait until <code class="prettyprint">status</code> is no longer processing. Defaults to <code class="prettyprint">false</code>.</td>
+</tr>
 </tbody></table>
 
 <blockquote>
@@ -659,6 +674,11 @@
 <th>Description</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>status</td>
+<td>String</td>
+<td>Can be one of <code class="prettyprint">processing</code>, <code class="prettyprint">failed</code>, or <code class="prettyprint">completed</code>. Will only see <code class="prettyprint">processing</code> if <code class="prettyprint">async</code> was set to <code class="prettyprint">true</code> on the request.</td>
+</tr>
 <tr>
 <td>retailer</td>
 <td>String</td>
