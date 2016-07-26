@@ -961,7 +961,7 @@
 
 <h2 id="webhooks-object">Webhooks object</h2>
 
-<p>Webhooks let you register a URL that the Zinc API notifies whenever an event happens pertaining to your account. When an event occurs, we will send a <code class="prettyprint">POST</code> request to the URL specified in the webhooks object. If no URL was specified, then a webhook will not be sent. The body of the <code class="prettyprint">POST</code> request is the standard response for that object.</p>
+<p>Webhooks let you register a URL that the Zinc API notifies whenever an event happens pertaining to your account. When an event occurs, we will send a <code class="prettyprint">POST</code> request to the URL specified in the webhooks object. If no URL was specified, then a webhook will not be sent. The body of the <code class="prettyprint">POST</code> request is the standard raw JSON response for that object.</p>
 
 <p>As an example, let&rsquo;s say you have just created an order via the Zinc API. Every time the order status changes, a <code class="prettyprint">POST</code> request will be sent to the URL that you passed in the <code class="prettyprint">status_updated</code> parameter of the webhooks object. The body will mimic the response received from the standard <code class="prettyprint">GET https://api.zinc.io/v1/orders/&lt;request_id&gt;</code> request. A webhook will also be sent if order fails, gets placed, or if tracking gets updated.</p>
 
