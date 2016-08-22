@@ -46,7 +46,7 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Zinc offers the underlying API for apps that need real-time order placing capabilities. With a single POST request, you can order an item from one of our supported retailers.</p>
+<p>Zinc lets you buy things from popular online retailers, including Amazon.com, with  a single POST request. Zinc also lets you get prices and descriptive information about products from supported retailers.</p>
 
 <h3 id="quick-start">Quick start</h3>
 
@@ -86,8 +86,8 @@
 <td>Amazon Canada</td>
 <td>amazon_ca</td>
 <td>Y</td>
-<td></td>
-<td></td>
+<td>Y</td>
+<td>Y</td>
 </tr>
 <tr>
 <td>Nordstrom</td>
@@ -185,7 +185,11 @@
   },
   "is_gift": true,
   "gift_message": "Here is your package, Tim! Enjoy!",
-  "shipping_method": "cheapest",
+  "shipping": {
+    "order_by": "price",
+    "max_days": 5,
+    "max_price": 1000
+  },
   "payment_method": {
     "name_on_card": "Ben Bitdiddle",
     "number": "5555555555554444",
@@ -256,7 +260,12 @@
 <tr>
 <td>shipping_method</td>
 <td>String</td>
-<td>The desired shipping method for the object. Available methods are <code class="prettyprint">cheapest</code> (always select the cheapest method available), <code class="prettyprint">fastest</code> (always select the fastest method available), or <code class="prettyprint">free</code> (which will fail for items without some sort of free shipping).</td>
+<td>The desired shipping method for the object. Available methods are <code class="prettyprint">cheapest</code> (always select the cheapest method available), <code class="prettyprint">fastest</code> (always select the fastest method available), or <code class="prettyprint">free</code> (which will fail for items without some sort of free shipping). You must provide either this or the <code class="prettyprint">shipping</code> attribute, but not both.</td>
+</tr>
+<tr>
+<td>shipping</td>
+<td>Object</td>
+<td>A <a href="#shipping-object">shipping object</a> with information as to which shipping method to use. You must provide either this or the <code class="prettyprint">shipping_method</code> attribute, but not both.</td>
 </tr>
 <tr>
 <td>billing_address</td>
@@ -826,6 +835,44 @@
 <td>prime</td>
 <td>Boolean</td>
 <td>(Amazon only) Specifies whether the selected offer should be an Amazon Prime offer</td>
+</tr>
+</tbody></table>
+
+<h2 id="shipping-object">Shipping object</h2>
+
+<blockquote>
+<p>Example shipping object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"order_by"</span>: <span class="s2">"price"</span>,
+  <span class="s2">"max_days"</span>: 5,
+  <span class="s2">"max_price"</span>: 1000
+<span class="o">}</span>
+</code></pre>
+
+<p>The shipping object gives you fine grained control over shipping speeds on your orders. Typically, there is a tradeoff between how fast your order arrives and the cost of shipping. The shipping object gives you a way to make sure that you don&rsquo;t go over budget and that your order still arrives on time.</p>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>order_by</td>
+<td>String</td>
+<td>The ordering of available shipping methods that meet the desired criteria. Available values are <code class="prettyprint">price</code> or <code class="prettyprint">speed</code>. If ordering by price, then the Zinc API will choose the cheapest shipping method that meets the desired criteria, while <code class="prettyprint">speed</code> will choose the fastest shipping method meeting the criteria.</td>
+</tr>
+<tr>
+<td>max_days</td>
+<td>Number</td>
+<td>The maximum number of days allowed for shipping on the order.</td>
+</tr>
+<tr>
+<td>max_price</td>
+<td>Number</td>
+<td>The maximum price in cents allowed for the shipping cost of the order.</td>
 </tr>
 </tbody></table>
 
