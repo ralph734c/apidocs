@@ -378,7 +378,7 @@
       <span class="s2">"merchant_order_id"</span> : <span class="s2">"112-1234567-7272727"</span>,
       <span class="s2">"merchant"</span> : <span class="s2">"amazon"</span>,
       <span class="s2">"account"</span> : <span class="s2">"timbeaver@gmail.com"</span>,
-      <span class="s2">"placed_at"</span> : ISODate<span class="o">(</span><span class="s2">"2014-07-02T23:51:08.366Z"</span><span class="o">)</span>
+      <span class="s2">"placed_at"</span> : <span class="s2">"2014-07-02T23:51:08.366Z"</span>
     <span class="o">}</span>
   <span class="o">]</span>,
   <span class="s2">"tracking"</span> : <span class="o">[</span>
@@ -387,7 +387,7 @@
       <span class="s2">"merchant_order_id"</span> : <span class="s2">"112-1234567-7272727"</span>,
       <span class="s2">"carrier"</span> : <span class="s2">"Fedex"</span>,
       <span class="s2">"tracking_number"</span> : <span class="s2">"9261290100129790891234"</span>,
-      <span class="s2">"obtained_at"</span> : ISODate<span class="o">(</span><span class="s2">"2014-07-03T23:22:48.165Z"</span><span class="o">)</span>
+      <span class="s2">"obtained_at"</span> : <span class="s2">"2014-07-03T23:22:48.165Z"</span>
     <span class="o">}</span>
   <span class="o">]</span>,
   <span class="s2">"request"</span> : <span class="o">{</span>
@@ -1138,7 +1138,7 @@
   <span class="s2">"merchant_order_id"</span> : <span class="s2">"112-1234567-7272727"</span>,
   <span class="s2">"merchant"</span> : <span class="s2">"amazon"</span>,
   <span class="s2">"account"</span> : <span class="s2">"timbeaver@gmail.com"</span>,
-  <span class="s2">"placed_at"</span> : ISODate<span class="o">(</span><span class="s2">"2014-07-02T23:51:08.366Z"</span><span class="o">)</span>
+  <span class="s2">"placed_at"</span> : <span class="s2">"2014-07-02T23:51:08.366Z"</span>
 <span class="o">}</span>
 </code></pre>
 
@@ -1264,12 +1264,54 @@
 <tr>
 <td>seller_num_ratings</td>
 <td>Number</td>
-<td>The number of ratings that tha seller has accumulated</td>
+<td>The number of ratings that the seller has accumulated</td>
 </tr>
 <tr>
 <td>seller_percent_positive</td>
 <td>Number</td>
 <td>Number between 0 and 100 denoting the percentage of positive ratings the seller has received</td>
+</tr>
+</tbody></table>
+
+<h2 id="tracking-object">Tracking object</h2>
+
+<blockquote>
+<p>Example tracking object</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"merchant_order_id"</span>: <span class="s2">"112-1234567-7272727"</span>,
+  <span class="s2">"carrier"</span>: <span class="s2">"UPS"</span>,
+  <span class="s2">"tracking_number"</span>: <span class="s2">"1Z9999999999999999"</span>,
+  <span class="s2">"product_id"</span>: <span class="s2">"0923568964"</span>
+<span class="o">}</span>
+</code></pre>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchant_order_id</td>
+<td>String</td>
+<td>The corresponding order identifier for which tracking was obtained.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td>String</td>
+<td>(Optional) The logistics carrier that was used to ship the package.</td>
+</tr>
+<tr>
+<td>tracking_number</td>
+<td>String</td>
+<td>(Optional) The tracking number from the logistics carrier.</td>
+</tr>
+<tr>
+<td>product_id</td>
+<td>String</td>
+<td>(Optional) The corresponding product for which tracking was obtained.</td>
 </tr>
 </tbody></table>
 
