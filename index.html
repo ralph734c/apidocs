@@ -593,12 +593,7 @@
 <tr>
 <td>status</td>
 <td>String</td>
-<td>Possible values are <code class="prettyprint">processing</code>, <code class="prettyprint">failed</code>, or <code class="prettyprint">completed</code>. You will only see <code class="prettyprint">processing</code> if <code class="prettyprint">async: true</code> was set on the request.</td>
-</tr>
-<tr>
-<td>product_description</td>
-<td>String</td>
-<td>The description of the product</td>
+<td>Possible values are <code class="prettyprint">processing</code>, <code class="prettyprint">failed</code>, or <code class="prettyprint">completed</code>. You will only see <code class="prettyprint">processing</code> if <code class="prettyprint">async: true</code> was set on the request</td>
 </tr>
 <tr>
 <td>retailer</td>
@@ -606,14 +601,14 @@
 <td>The retailer for the product</td>
 </tr>
 <tr>
-<td>epids</td>
-<td>Array</td>
-<td>Array of objects containing external product identifier (epid) objects. An epid object contains a <code class="prettyprint">type</code> field describing the name of the external product identifier and a <code class="prettyprint">value</code> field for the identifier&rsquo;s value.</td>
+<td>product_id</td>
+<td>String</td>
+<td>The retailer&rsquo;s unique identifier for the product</td>
 </tr>
 <tr>
-<td>product_details</td>
-<td>Array</td>
-<td>An array of strings providing details about the product</td>
+<td>timestamp</td>
+<td>String</td>
+<td>The timestamp that the resource was accessed</td>
 </tr>
 <tr>
 <td>title</td>
@@ -621,14 +616,44 @@
 <td>Title of the product</td>
 </tr>
 <tr>
-<td>variant_specifics</td>
+<td>product_details</td>
 <td>Array</td>
-<td>Array of objects containing information about the types and values of product variants available. A variant specifics object contains a <code class="prettyprint">dimension</code> field describing the type of the variant (e.g. &ldquo;Color&rdquo;) and a <code class="prettyprint">value</code> field describing the specific value available.</td>
+<td>An array of strings providing details about the product</td>
 </tr>
 <tr>
-<td>product_id</td>
+<td>main_image</td>
 <td>String</td>
-<td>The retailer&rsquo;s unique identifier for the product</td>
+<td>The URL of the primary image associated with the product</td>
+</tr>
+<tr>
+<td>images</td>
+<td>Array</td>
+<td>An array of image URLs associated with the product</td>
+</tr>
+<tr>
+<td>variant_specifics</td>
+<td>Array</td>
+<td>Array of objects containing information about the types and values of product variants available. A variant specifics object contains a <code class="prettyprint">dimension</code> field describing the type of the variant (e.g. &ldquo;Color&rdquo;) and a <code class="prettyprint">value</code> field describing the specific value available</td>
+</tr>
+<tr>
+<td>categories</td>
+<td>Array</td>
+<td>Array of different categories that the product belongs in</td>
+</tr>
+<tr>
+<td>authors</td>
+<td>Array</td>
+<td>Array of author names (only available for products that are books)</td>
+</tr>
+<tr>
+<td>product_description</td>
+<td>String</td>
+<td>The description of the product</td>
+</tr>
+<tr>
+<td>epids</td>
+<td>Array</td>
+<td>Array of objects containing external product identifier (epid) objects. An epid object contains a <code class="prettyprint">type</code> field describing the name of the external product identifier and a <code class="prettyprint">value</code> field for the identifier&rsquo;s value</td>
 </tr>
 </tbody></table>
 
