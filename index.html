@@ -197,12 +197,31 @@
 <p>Example authentication request</p>
 </blockquote>
 <pre class="highlight shell"><code>curl https://api.zinc.io/v1/orders <span class="se">\</span>
-  -H &lt;client_token&gt;:
+  -u &lt;client_token&gt;:
 </code></pre>
 
 <p>You can authenticate your account by including your client token in your request. Authentication is performed through HTTP Basic Auth, where the client token is the basic auth username value. You do not need to provide a password.</p>
 
 <p>Make sure that you don&rsquo;t share your client token and that you keep it away from publicly accessible areas such as Github, client-side code, etc. Client tokens are tied to your account, so you will be charged for any orders or requests made with your client token. If you believe your client token has been compromised, please contact support@zinc.io immediately.</p>
+
+          <h1 id="idempotency-keys">Idempotency Keys</h1>
+
+<blockquote>
+<p>Example idempontency key request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders"</span> <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+  -d <span class="s1">'{
+  "idempotency_key": &lt;idempotency_key&gt;,
+  "retailer": "amazon",
+  "max_price": 2300,
+  ...
+  }'</span>
+</code></pre>
+
+<p>The Zinc API does not provide out of the box deduplication of orders. Each time you send a new order request, the Zinc API will attempt to place a new order. However, the API supports idempotency for safely retrying requests without accidentally performing the same operation twice. For example, if an order request fails due to a network connection error, you can retry the request with the same idempotency key to guarantee that only a single order is created.</p>
+
+<p>To perform an idempotent request, attach a unique key to request body of any POST request with the parameter <code class="prettyprint">&quot;idempotency_key&quot;: &lt;idempotency_key&gt;</code>. How you create unique keys is completely up to you. We suggest using random strings or UUIDs. We&rsquo;ll always send back the same response for requests made with the same key.</p>
 
           <h1 id="place-an-order">Place an order</h1>
 
