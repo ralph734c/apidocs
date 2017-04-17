@@ -501,6 +501,14 @@
 </tr>
 </tbody></table>
 
+<h2 id="selecting-shipping-speed-and-cost">Selecting shipping speed and cost</h2>
+
+<p>Ordering on the Zinc API can be complicated due to all the potential shipping options available. Generally, faster shipping will cost more money, so you must decide how fast you&rsquo;d like your items or how much money to pay for shipping. Zinc provides a number of options to customize your shipping speed and cost formulas.</p>
+
+<p>Since different items will have different shipping options, you can use a product&rsquo;s <a href="#seller-selection-criteria">seller selection criteria</a> to specify <code class="prettyprint">max_handling_days</code>. This will filter the list of potential offers down to those that will arrive within a certain number of days. The Zinc API will then select the cheapest offer that matched all of your seller selection criteria to make a purchase. For example, if you specified <code class="prettyprint">&quot;max_handling_days&quot;: 6</code>, then any offer whose latest delivery date is greater than 6 days from now would be excluded from your buying selection. Thus, if two sellers are offering the same product, but one has a guaranteed delivery date 10 days away and the other seller has a guaranteed delivery date 5 days away, the second seller&rsquo;s offer would be selected.</p>
+
+<p>You may also use the <a href="#shipping-object">shipping parameter</a> on an order to select a shipping option once a product has been selected. Instead of filtering by the different offers, like the seller selection criteria, the <code class="prettyprint">shipping</code> parameter will choose the shipping speed on the selected offer. For example, if you set <code class="prettyprint">&quot;max_days&quot;: 5</code> on the <code class="prettyprint">shipping</code> parameter, the Zinc API would attempt to select the cheapest shipping method that took less than 5 days. Thus, if there was a shipping method that took 3 days and cost $10 and another shipping method that took 7 days but cost $2, the first shipping option would be selected.</p>
+
           <h1 id="get-product-details">Get product details</h1>
 
 <p>Get up to date information on the title, description, manufacturer details, item specifics, and more for any product on our supported retailers.</p>
@@ -835,7 +843,7 @@
 <tr>
 <td>seller_selection_criteria</td>
 <td>Object</td>
-<td>A <a href="#seller-selection-criteria-object">seller selection criteria</a> object containing information about which offers to choose when there are multiple offers available. If not provided, the seller selection criteria will default to <code class="prettyprint">&quot;prime&quot;: true</code>, <code class="prettyprint">&quot;handling_days_max&quot;: 6</code>, and <code class="prettyprint">&quot;condition_in&quot;: [&quot;New&quot;]</code>.</td>
+<td>A <a href="#seller-selection-criteria-object">seller selection criteria</a> object containing information about which offers to choose when there are multiple offers available. If the seller selection criteria object is not included for a product, the seller selection criteria will default to <code class="prettyprint">&quot;prime&quot;: true</code>, <code class="prettyprint">&quot;handling_days_max&quot;: 6</code>, and <code class="prettyprint">&quot;condition_in&quot;: [&quot;New&quot;]</code>.</td>
 </tr>
 </tbody></table>
 
