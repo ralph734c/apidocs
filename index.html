@@ -785,12 +785,6 @@
 <pre class="highlight shell"><code><span class="o">{</span>
   <span class="s2">"product_id"</span>: <span class="s2">"0923568964"</span>,
   <span class="s2">"quantity"</span>: 1,
-  <span class="s2">"variants"</span>: <span class="o">[</span>
-    <span class="o">{</span>
-      <span class="s2">"dimension"</span>: <span class="s2">"color"</span>,
-      <span class="s2">"value"</span>: <span class="s2">"Red"</span>,
-    <span class="o">}</span>
-  <span class="o">]</span>,
   <span class="s2">"seller_selection_criteria"</span>: <span class="o">{</span>
     <span class="s2">"prime"</span>: <span class="nb">true</span>,
     <span class="s2">"handling_days_max"</span>: 6,
@@ -815,11 +809,6 @@
 <td>quantity</td>
 <td>Number</td>
 <td>The number of products to purchase.</td>
-</tr>
-<tr>
-<td>variants</td>
-<td>Array</td>
-<td>An array of variant objects containing information about the types of values of a specific product variant to select. A variant contains <code class="prettyprint">dimension</code> field describing the type of the variant (e.g. &ldquo;color&rdquo; or &ldquo;size&rdquo;) and a <code class="prettyprint">value</code> field describing the specific value to select.</td>
 </tr>
 <tr>
 <td>seller_selection_criteria</td>
@@ -1365,6 +1354,7 @@
   <span class="s2">"merchant_order_id"</span>: <span class="s2">"112-1234567-7272727"</span>,
   <span class="s2">"carrier"</span>: <span class="s2">"UPS"</span>,
   <span class="s2">"tracking_number"</span>: <span class="s2">"1Z9999999999999999"</span>,
+  <span class="s2">"tracking_url"</span>: <span class="s2">"https://some-url.com/tracking-number/1Z9999999999999999"</span>,
   <span class="s2">"product_id"</span>: <span class="s2">"0923568964"</span>
 <span class="o">}</span>
 </code></pre>
@@ -1390,6 +1380,11 @@
 <td>tracking_number</td>
 <td>String</td>
 <td>(Optional) The tracking number from the logistics carrier.</td>
+</tr>
+<tr>
+<td>tracking_url</td>
+<td>String</td>
+<td>(Optional) The tracking url that can be used to find the carrier and tracking number for a package.</td>
 </tr>
 <tr>
 <td>product_id</td>
