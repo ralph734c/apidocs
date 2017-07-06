@@ -1106,8 +1106,8 @@
 <p>Example webhooks object</p>
 </blockquote>
 <pre class="highlight shell"><code><span class="o">{</span>
-  <span class="s2">"order_placed"</span>: <span class="s2">"http://mywebsite.com/zinc/order_placed"</span>,
-  <span class="s2">"order_failed"</span>: <span class="s2">"http://mywebsite.com/zinc/order_failed"</span>,
+  <span class="s2">"request_succeeded"</span>: <span class="s2">"http://mywebsite.com/zinc/request_placed"</span>,
+  <span class="s2">"request_failed"</span>: <span class="s2">"http://mywebsite.com/zinc/request_failed"</span>,
   <span class="s2">"tracking_obtained"</span>: <span class="s2">"http://mywebsite.com/zinc/tracking_obtained"</span>,
   <span class="s2">"status_updated"</span>: <span class="s2">"http://mywebsite.com/zinc/status_updated"</span>
 <span class="o">}</span>
@@ -1121,14 +1121,14 @@
 </tr>
 </thead><tbody>
 <tr>
-<td>order_placed</td>
+<td>request_succeeded</td>
 <td>String</td>
-<td>The webhook URL to send data to when an order is placed</td>
+<td>The webhook URL to send data to when a request succeeds</td>
 </tr>
 <tr>
-<td>order_failed</td>
+<td>request_failed</td>
 <td>String</td>
-<td>The webhook URL to send data to when an order fails</td>
+<td>The webhook URL to send data to when a request fails</td>
 </tr>
 <tr>
 <td>tracking_obtained</td>
