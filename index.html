@@ -793,6 +793,223 @@
 </tr>
 </tbody></table>
 
+          <h1 id="zinc-managed-accounts">Zinc Managed Accounts</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>Zinc&rsquo;s Managed Accounts allows customers to place orders without worrying about
+creating and managing Amazon accounts. Instead, API users can fund a balance
+with Zinc using PayPal or wire transfer. A network of Pro-buyers will then place
+orders on your behalf.</p>
+
+<p>Managed accounts is currently available for Amazon and Amazon UK.</p>
+
+<h2 id="using-managed-accounts">Using Managed Accounts</h2>
+
+<p>Zinc Managed Accounts is currently available by invite only. Please contact
+sales@zinc.io and mention Managed Accounts. You can also contact this address if
+you need more information to determine if Managed Accounts are right for you.</p>
+
+<h2 id="funding-your-account">Funding your account</h2>
+
+<blockquote>
+<p>Check account balance and view past transactions</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/addax/balance"</span> -u &lt;client_token&gt;:
+curl <span class="s2">"https://api.zinc.io/v1/addax/transactions?count=100&amp;offset=0"</span> -u &lt;client_token&gt;:
+</code></pre>
+
+<p>Please contact sales@zinc.io. They&rsquo;ll help set up funding options taylored for
+your needs. Generally, funding is performed either through PayPal&rsquo;s Mass Pay
+option or via wire transfer directly to our bank.</p>
+
+<p>You&rsquo;ll need to fund your account before you&rsquo;ll be able to place orders.</p>
+
+<p>You can check your account balance and transactions at any time.</p>
+
+<p>Note: these funds are used to pay for the cost of your order on Amazon, but
+you&rsquo;ll still be billed the normal ordering fee at the end of the month. Your
+Zinc sales contact can provide more information about billing.</p>
+
+<h2 id="create-an-order">Create an order</h2>
+
+<p>Follow the <a href="#">standard documentation for creating orders</a> with two changes:</p>
+
+<ol>
+<li>Add <code class="prettyprint">&quot;addax&quot;: true</code> to your request body.</li>
+<li>Do not supply the <code class="prettyprint">retailer_credentials</code>, <code class="prettyprint">payment_method</code>, or <code class="prettyprint">billing_address</code> keys.</li>
+</ol>
+
+<p>All other ordering features and options work as specified in the standard
+documentation.</p>
+
+<p>Successful orders will result in a transaction decreasing your account balance
+for the currency of the market. Failed orders will not cost you anything.</p>
+
+<h2 id="cancelling-orders">Cancelling orders</h2>
+
+<p>The Zinc API supports pre-shipment order cancellation on Amazon.com and
+Amazon.co.uk. Simply POST to the cancellation endpoint.</p>
+
+<blockquote>
+<p>Example cancellation POST</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;order_id&gt;/cancel"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+  -H <span class="s1">'Content-type: application/json'</span> <span class="se">\</span>
+  -d <span class="s1">'{
+    "webhooks": {
+      "request_succeeded": "https://www.example.com/webhooks/success",
+      "request_failed": "https://www.example.com/webhooks/failed"
+     }
+   }'</span>
+</code></pre>
+
+<p>The <code class="prettyprint">request_succeeded</code> and <code class="prettyprint">request_failed</code> webhooks are optional. If supplied,
+they will be called when the corresponding event occurs on the cancellation
+request.</p>
+
+<h3 id="attempting_to_cancel"><code class="prettyprint">attempting_to_cancel</code></h3>
+
+<p>In about 50% of cases, Amazon is unable to immediately cancel an order. Instead,
+they tell Zinc that they&rsquo;re &ldquo;Attempting to Cancel&rdquo; the order. This currently
+results in a <em>failure</em> code in the API. We hope to improve this in the future to
+automatically update when the order is either cancelled or shipped. At the
+moment, however, you&rsquo;ll need to manually open a refund request for these cases.
+See below for more details.</p>
+
+<h2 id="returning-orders">Returning orders</h2>
+
+<p>The Zinc API also supports generating return labels through Amazon.</p>
+
+<blockquote>
+<p>Example return label request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;order_id&gt;/return"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+  -H <span class="s1">'Content-type: application/json'</span> <span class="se">\</span>
+  -d <span class="s1">'{
+    "webhooks": {
+      "request_succeeded": "https://www.exaple.com/webhooks/return/success",
+      "request_failed": "https://www.exaple.com/webhooks/return/failed",
+    },
+    "products": [{"product_id": "B0000001234", "quantity": 1}],
+    "reason_code": "inaccurate website description",
+    "method_code": "UPS Dropoff",
+    "explanation": "Additional details for Amazon seller",
+  }'</span>
+</code></pre>
+
+<p>Webhooks are optional, as usual, but the other four fields are required.</p>
+
+<p><code class="prettyprint">products</code> is in the same format as for an order. It determines which products
+of a multi-item order to return.</p>
+
+<p><code class="prettyprint">reason_code</code> and <code class="prettyprint">method_code</code> are passed directly to Amazon. The available
+options may vary based on Amazon country and customer address. However, <code class="prettyprint">UPS
+Dropoff</code> is the only method supported for automatic refunds. If you&rsquo;d like to
+use a different method, you&rsquo;ll need to manually request refunds as specified
+below.</p>
+
+<p>Many users have had success using &ldquo;inaccurate website description&rdquo; for
+Amazon.com and &ldquo;description on website was not accurate&rdquo; for Amazon.co.uk.</p>
+
+<p><code class="prettyprint">explanation</code> is extra information that will be passed to Amazon or the Amazon
+seller. It is required for some return reasons.</p>
+
+<h2 id="refunds">Refunds</h2>
+
+<p>In some cases, a Managed Account order might initially succeed (and thus charge
+your account) but later need to be reversed. For example, your buyer might want
+to return the product, or the order may be cancelled by the Amazon seller.</p>
+
+<p>To address these cases, we&rsquo;ve created a refund process. All refunds will be sent
+to the Pro-buyer responsible for your order for them to approve or decline. Any
+declined refunds may be appealed to support@zinc.io.</p>
+
+<p>When there&rsquo;s a successful cancellation (see above) or a return created through
+the Zinc API is delivered back to Amazon, we&rsquo;ll automatically start the refund
+process for your account. In other cases, you&rsquo;ll need to request a refund
+manually.</p>
+
+<h3 id="checking-refund-status">Checking refund status</h3>
+
+<p>Make a GET request to the refund endpoint.</p>
+
+<blockquote>
+<p>Check refund status</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;order_id&gt;/refund"</span> <span class="se">\</span>
+  -u &lt;client_token&gt;:
+</code></pre>
+
+<p><code class="prettyprint">refund_state</code> will be one of the following values:</p>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>(null)</td>
+<td>No refund has been requested.</td>
+</tr>
+<tr>
+<td>requested</td>
+<td>A refund has been requested. The Pro-buyer has 30 days to respond.</td>
+</tr>
+<tr>
+<td>refunded</td>
+<td>A refund has been issued to your account.</td>
+</tr>
+<tr>
+<td>declined</td>
+<td>The Pro-buyer has declined the refund request. Please contact support@zinc.io if you need more information.</td>
+</tr>
+</tbody></table>
+
+<h3 id="requesting-a-refund-manually">Requesting a refund manually</h3>
+
+<p>Make a POST request to the refund endpoint.</p>
+
+<blockquote>
+<p>Create refund</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;order_id&gt;/refund"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+  -H <span class="s1">'Content-type: application/json'</span> <span class="se">\</span>
+  -d <span class="s1">'{"reason": "refund_reason_code", "note": "Please include as much detail as possible in the note."}'</span>
+</code></pre>
+
+<p>Valid reason codes include:</p>
+
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">attempting_to_cancel</code></td>
+<td>You attempted to cancel the order, but are unsure if it completed. The Pro-buyer will refund if possible and decline if the order actually went through.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">return_completed</code></td>
+<td>The item was returned, but not using a label that was generated by Zinc.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">other</code></td>
+<td>Please contact support@zinc.io and explain why you need to use this code.</td>
+</tr>
+</tbody></table>
+
+<p>If none of these reason codes cover your use case, please contact
+support@zinc.io and use the code: <code class="prettyprint">other</code>.</p>
+
           <h1 id="object-reference">Object reference</h1>
 
 <h2 id="product-object">Product object</h2>
