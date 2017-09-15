@@ -508,6 +508,15 @@
 
 <p>Note that the order bundler will not group together two orders which have the same product ids.</p>
 
+<h2 id="amazon-email-verification">Amazon Email Verification</h2>
+
+<p>Amazon occasionally requires additional verification of account ownership by
+emailing you a code to enter during login. If this happens during an order, you
+will receive an <code class="prettyprint">account_locked_verification_required</code> error. In this case,
+please check the email associated with the account and obtain the verification
+code. Then resubmit your order and supply the code as <code class="prettyprint">verification_code</code> under
+the <code class="prettyprint">retailer_credentials</code> object.</p>
+
           <h1 id="get-product-details">Get product details</h1>
 
 <p>Get up to date information on the title, description, manufacturer details, item specifics, and more for any product on our supported retailers.</p>
@@ -879,7 +888,14 @@ automatically update when the order is either cancelled or shipped. At the
 moment, however, you&rsquo;ll need to manually open a refund request for these cases.
 See below for more details.</p>
 
-<h2 id="returning-orders">Returning orders</h2>
+<blockquote>
+<p>Checking on a cancelled order</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/cancellations/&lt;cancellation request_id&gt;"</span> <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+</code></pre>
+
+<h2 id="returns">Returns</h2>
 
 <p>The Zinc API also supports generating return labels through Amazon.</p>
 
@@ -899,10 +915,11 @@ See below for more details.</p>
     "reason_code": "inaccurate website description",
     "method_code": "UPS Dropoff",
     "explanation": "Additional details for Amazon seller",
+    "cancel_pending": false
   }'</span>
 </code></pre>
 
-<p>Webhooks are optional, as usual, but the other four fields are required.</p>
+<p><code class="prettyprint">webhooks</code> and <code class="prettyprint">cancel_pending</code> are optional, but the other four fields are required.</p>
 
 <p><code class="prettyprint">products</code> is in the same format as for an order. It determines which products
 of a multi-item order to return.</p>
@@ -917,7 +934,25 @@ below.</p>
 Amazon.com and &ldquo;description on website was not accurate&rdquo; for Amazon.co.uk.</p>
 
 <p><code class="prettyprint">explanation</code> is extra information that will be passed to Amazon or the Amazon
-seller. It is required for some return reasons.</p>
+seller. It is required for some return reasons.
+&ldquo;<code class="prettyprint">
+By default, if a return is already in progress, we&#39;ll respond with a
+</code>return_in_progress<code class="prettyprint">error code and include the status of the return. You may
+override this behavior by setting</code>cancel_pending<code class="prettyprint">to</code>true`. This will cause us
+to cancel any pending returns before attempting to place the return.</p>
+
+<p>You can also use the new <code class="prettyprint">return_in_progress</code> error to check the status of your
+return. Just supply an invalid <code class="prettyprint">method_code</code> like &quot;Dummy Method Code&rdquo;. If the
+return is in progress, you&rsquo;ll get the status back with the error. If the return
+is not yet started, we&rsquo;ll be unable to start a return because the method code
+does not exist.</p>
+
+<blockquote>
+<p>Checking on a returned order</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/returns/&lt;return request_id&gt;"</span> <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+</code></pre>
 
 <h2 id="refunds">Refunds</h2>
 
@@ -1656,6 +1691,10 @@ support@zinc.io and use the code: <code class="prettyprint">other</code>.</p>
 <tr>
 <td>account_locked</td>
 <td>The retailer asked for additional information to verify your account.</td>
+</tr>
+<tr>
+<td>account_locked_verification_required</td>
+<td>The retailer emailed you a code which you must supply to continue ordering.</td>
 </tr>
 <tr>
 <td>account_login_failed</td>
