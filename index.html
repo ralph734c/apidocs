@@ -568,14 +568,16 @@ shipping and can only be initiated for order requests that were successful.</p>
 they will be called when the corresponding event occurs on the cancellation
 request.</p>
 
-<h3 id="attempting_to_cancel"><code class="prettyprint">attempting_to_cancel</code></h3>
+<h3 id="attempting-to-cancel">Attempting to cancel</h3>
 
 <p>In about 50% of cases, Amazon is unable to immediately cancel an order. Instead,
 they tell Zinc that they&rsquo;re &ldquo;Attempting to Cancel&rdquo; the order. This currently
-results in a <em>failure</em> code in the API. We hope to improve this in the future to
-automatically update when the order is either cancelled or shipped. At the
-moment, however, you&rsquo;ll need to manually open a refund request for these cases.
-See below for more details.</p>
+results in the <em>failure</em> code <code class="prettyprint">attempting_to_cancel</code> in the API. This status will
+be updated when the order is either cancelled successfully or if the cancellation
+fails. The Zinc API will continue to poll the retailer and attempt to figure out
+the status of the order, but no guarantees can be made for how long this will take.
+Once Zinc determines the actual status of the cancellation, the <code class="prettyprint">attempting_to_cancel</code>
+error code will be removed and the updated response will take its place.</p>
 
 <blockquote>
 <p>Checking on a cancelled order</p>
