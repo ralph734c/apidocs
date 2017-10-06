@@ -625,15 +625,15 @@ below.</p>
 Amazon.com and &ldquo;description on website was not accurate&rdquo; for Amazon.co.uk.</p>
 
 <p><code class="prettyprint">explanation</code> is extra information that will be passed to Amazon or the Amazon
-seller. It is required for some return reasons.
-&ldquo;<code class="prettyprint">
-By default, if a return is already in progress, we&#39;ll respond with a
-</code>return_in_progress<code class="prettyprint">error code and include the status of the return. You may
-override this behavior by setting</code>cancel_pending<code class="prettyprint">to</code>true`. This will cause us
+seller. It is required for some return reasons.</p>
+
+<p>By default, if a return is already in progress, we&rsquo;ll respond with a
+<code class="prettyprint">return_in_progress</code> error code and include the status of the return. You may
+override this behavior by setting <code class="prettyprint">cancel_pending</code> to <code class="prettyprint">true</code>. This will cause us
 to cancel any pending returns before attempting to place the return.</p>
 
 <p>You can also use the new <code class="prettyprint">return_in_progress</code> error to check the status of your
-return. Just supply an invalid <code class="prettyprint">method_code</code> like &quot;Dummy Method Code&rdquo;. If the
+return. Just supply an invalid <code class="prettyprint">method_code</code> like &ldquo;Dummy Method Code&rdquo;. If the
 return is in progress, you&rsquo;ll get the status back with the error. If the return
 is not yet started, we&rsquo;ll be unable to start a return because the method code
 does not exist.</p>
