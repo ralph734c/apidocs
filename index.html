@@ -204,7 +204,7 @@
 
 <p>Idempotency keys are STRONGLY recommended. In the unlikely event that an API request returns a 5XX status code, duplicate requests could occur if you reattempt the request. We can&rsquo;t be sure of the state of the request when we return a 5XX status code, so it&rsquo;s best to attempt requests with an idempotency key. If you aren&rsquo;t using an idempotency key and you retry orders with a 5XX error code, Zinc will not refund you for duplicate orders.</p>
 
-          <h1 id="place-an-order">Place an order</h1>
+          <h1 id="orders">Orders</h1>
 
 <h2 id="create-an-order">Create an order</h2>
 
@@ -517,7 +517,133 @@ please check the email associated with the account and obtain the verification
 code. Then resubmit your order and supply the code as <code class="prettyprint">verification_code</code> under
 the <code class="prettyprint">retailer_credentials</code> object.</p>
 
-          <h1 id="get-product-details">Get product details</h1>
+<h2 id="aborting-orders">Aborting orders</h2>
+
+<p>The Zinc API allows you to abort an order uncompleted orders that are still
+in the <code class="prettyprint">request_processing</code> stage. This
+functionality allows you to stop an order from going through if a mistake was made
+on the order, or if the order is taking too long to process.</p>
+
+<blockquote>
+<p>Example abort POST</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;request_id&gt;/cancel"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  -u &lt;client_token&gt;:
+</code></pre>
+
+<p>The response to this request will be a standard GET response for an order.
+If we are able to successfully abort the order, an <code class="prettyprint">aborted_request</code> error code
+will be returned for the order in question. You may need to continue to wait before
+the API is able to abort a request on an already running process.</p>
+
+<p>Note that abortion is best effort, so it is not guaranteed that you will be
+able to abort a request.</p>
+
+<h2 id="cancelling-orders">Cancelling orders</h2>
+
+<p>The Zinc API supports pre-shipment order cancellation on Amazon.com and
+Amazon.co.uk. Simply POST to the cancellation endpoint. Note that cancelling an order
+occurs after an order has been successfully placed on the API. This is distinct from
+an order abort, which occurs while the order is still in progress. Cancellations
+will send a cancellation request to the retailer and attempt to stop the order from
+shipping and can only be initiated for order requests that were successful.</p>
+
+<blockquote>
+<p>Example cancellation POST</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;request_id&gt;/cancel"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+  -H <span class="s1">'Content-type: application/json'</span> <span class="se">\</span>
+  -d <span class="s1">'{
+    "webhooks": {
+      "request_succeeded": "https://www.example.com/webhooks/success",
+      "request_failed": "https://www.example.com/webhooks/failed"
+     }
+   }'</span>
+</code></pre>
+
+<p>The <code class="prettyprint">request_succeeded</code> and <code class="prettyprint">request_failed</code> webhooks are optional. If supplied,
+they will be called when the corresponding event occurs on the cancellation
+request.</p>
+
+<h3 id="attempting_to_cancel"><code class="prettyprint">attempting_to_cancel</code></h3>
+
+<p>In about 50% of cases, Amazon is unable to immediately cancel an order. Instead,
+they tell Zinc that they&rsquo;re &ldquo;Attempting to Cancel&rdquo; the order. This currently
+results in a <em>failure</em> code in the API. We hope to improve this in the future to
+automatically update when the order is either cancelled or shipped. At the
+moment, however, you&rsquo;ll need to manually open a refund request for these cases.
+See below for more details.</p>
+
+<blockquote>
+<p>Checking on a cancelled order</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/cancellations/&lt;cancellation request_id&gt;"</span> <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+</code></pre>
+
+<h2 id="returns">Returns</h2>
+
+<p>The Zinc API also supports generating return labels through Amazon.</p>
+
+<blockquote>
+<p>Example return label request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;request_id&gt;/return"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+  -H <span class="s1">'Content-type: application/json'</span> <span class="se">\</span>
+  -d <span class="s1">'{
+    "webhooks": {
+      "request_succeeded": "https://www.exaple.com/webhooks/return/success",
+      "request_failed": "https://www.exaple.com/webhooks/return/failed",
+    },
+    "products": [{"product_id": "B0000001234", "quantity": 1}],
+    "reason_code": "inaccurate website description",
+    "method_code": "UPS Dropoff",
+    "explanation": "Additional details for Amazon seller",
+    "cancel_pending": false
+  }'</span>
+</code></pre>
+
+<p><code class="prettyprint">webhooks</code> and <code class="prettyprint">cancel_pending</code> are optional, but the other four fields are required.</p>
+
+<p><code class="prettyprint">products</code> is in the same format as for an order. It determines which products
+of a multi-item order to return.</p>
+
+<p><code class="prettyprint">reason_code</code> and <code class="prettyprint">method_code</code> are passed directly to Amazon. The available
+options may vary based on Amazon country and customer address. However, <code class="prettyprint">UPS
+Dropoff</code> is the only method supported for automatic refunds. If you&rsquo;d like to
+use a different method, you&rsquo;ll need to manually request refunds as specified
+below.</p>
+
+<p>Many users have had success using &ldquo;inaccurate website description&rdquo; for
+Amazon.com and &ldquo;description on website was not accurate&rdquo; for Amazon.co.uk.</p>
+
+<p><code class="prettyprint">explanation</code> is extra information that will be passed to Amazon or the Amazon
+seller. It is required for some return reasons.
+&ldquo;<code class="prettyprint">
+By default, if a return is already in progress, we&#39;ll respond with a
+</code>return_in_progress<code class="prettyprint">error code and include the status of the return. You may
+override this behavior by setting</code>cancel_pending<code class="prettyprint">to</code>true`. This will cause us
+to cancel any pending returns before attempting to place the return.</p>
+
+<p>You can also use the new <code class="prettyprint">return_in_progress</code> error to check the status of your
+return. Just supply an invalid <code class="prettyprint">method_code</code> like &quot;Dummy Method Code&rdquo;. If the
+return is in progress, you&rsquo;ll get the status back with the error. If the return
+is not yet started, we&rsquo;ll be unable to start a return because the method code
+does not exist.</p>
+
+<blockquote>
+<p>Checking on a returned order</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/returns/&lt;return request_id&gt;"</span> <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+</code></pre>
+
+          <h1 id="product-details">Product details</h1>
 
 <p>Get up to date information on the title, description, manufacturer details, item specifics, and more for any product on our supported retailers.</p>
 
@@ -692,7 +818,7 @@ the <code class="prettyprint">retailer_credentials</code> object.</p>
 </tr>
 </tbody></table>
 
-<h1 id="get-product-prices">Get product prices</h1>
+<h1 id="product-prices">Product prices</h1>
 
 <p>Get information about all the offers for a particular product, including seller name, item price, shipping price, condition, seller reputation, and more.</p>
 
@@ -808,8 +934,7 @@ the <code class="prettyprint">retailer_credentials</code> object.</p>
 
 <p>Zinc&rsquo;s Managed Accounts allows customers to place orders without worrying about
 creating and managing Amazon accounts. Instead, API users can fund a balance
-with Zinc using PayPal or wire transfer. A network of Pro-buyers will then place
-orders on your behalf.</p>
+with Zinc using PayPal or wire transfer. Zinc will then place orders on your behalf.</p>
 
 <p>Managed accounts is currently available for Amazon and Amazon UK.</p>
 
@@ -855,105 +980,6 @@ documentation.</p>
 <p>Successful orders will result in a transaction decreasing your account balance
 for the currency of the market. Failed orders will not cost you anything.</p>
 
-<h2 id="cancelling-orders">Cancelling orders</h2>
-
-<p>The Zinc API supports pre-shipment order cancellation on Amazon.com and
-Amazon.co.uk. Simply POST to the cancellation endpoint.</p>
-
-<blockquote>
-<p>Example cancellation POST</p>
-</blockquote>
-<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;order_id&gt;/cancel"</span> <span class="se">\</span>
-  -X POST <span class="se">\</span>
-  -u &lt;client_token&gt;: <span class="se">\</span>
-  -H <span class="s1">'Content-type: application/json'</span> <span class="se">\</span>
-  -d <span class="s1">'{
-    "webhooks": {
-      "request_succeeded": "https://www.example.com/webhooks/success",
-      "request_failed": "https://www.example.com/webhooks/failed"
-     }
-   }'</span>
-</code></pre>
-
-<p>The <code class="prettyprint">request_succeeded</code> and <code class="prettyprint">request_failed</code> webhooks are optional. If supplied,
-they will be called when the corresponding event occurs on the cancellation
-request.</p>
-
-<h3 id="attempting_to_cancel"><code class="prettyprint">attempting_to_cancel</code></h3>
-
-<p>In about 50% of cases, Amazon is unable to immediately cancel an order. Instead,
-they tell Zinc that they&rsquo;re &ldquo;Attempting to Cancel&rdquo; the order. This currently
-results in a <em>failure</em> code in the API. We hope to improve this in the future to
-automatically update when the order is either cancelled or shipped. At the
-moment, however, you&rsquo;ll need to manually open a refund request for these cases.
-See below for more details.</p>
-
-<blockquote>
-<p>Checking on a cancelled order</p>
-</blockquote>
-<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/cancellations/&lt;cancellation request_id&gt;"</span> <span class="se">\</span>
-  -u &lt;client_token&gt;: <span class="se">\</span>
-</code></pre>
-
-<h2 id="returns">Returns</h2>
-
-<p>The Zinc API also supports generating return labels through Amazon.</p>
-
-<blockquote>
-<p>Example return label request</p>
-</blockquote>
-<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;order_id&gt;/return"</span> <span class="se">\</span>
-  -X POST <span class="se">\</span>
-  -u &lt;client_token&gt;: <span class="se">\</span>
-  -H <span class="s1">'Content-type: application/json'</span> <span class="se">\</span>
-  -d <span class="s1">'{
-    "webhooks": {
-      "request_succeeded": "https://www.exaple.com/webhooks/return/success",
-      "request_failed": "https://www.exaple.com/webhooks/return/failed",
-    },
-    "products": [{"product_id": "B0000001234", "quantity": 1}],
-    "reason_code": "inaccurate website description",
-    "method_code": "UPS Dropoff",
-    "explanation": "Additional details for Amazon seller",
-    "cancel_pending": false
-  }'</span>
-</code></pre>
-
-<p><code class="prettyprint">webhooks</code> and <code class="prettyprint">cancel_pending</code> are optional, but the other four fields are required.</p>
-
-<p><code class="prettyprint">products</code> is in the same format as for an order. It determines which products
-of a multi-item order to return.</p>
-
-<p><code class="prettyprint">reason_code</code> and <code class="prettyprint">method_code</code> are passed directly to Amazon. The available
-options may vary based on Amazon country and customer address. However, <code class="prettyprint">UPS
-Dropoff</code> is the only method supported for automatic refunds. If you&rsquo;d like to
-use a different method, you&rsquo;ll need to manually request refunds as specified
-below.</p>
-
-<p>Many users have had success using &ldquo;inaccurate website description&rdquo; for
-Amazon.com and &ldquo;description on website was not accurate&rdquo; for Amazon.co.uk.</p>
-
-<p><code class="prettyprint">explanation</code> is extra information that will be passed to Amazon or the Amazon
-seller. It is required for some return reasons.
-&ldquo;<code class="prettyprint">
-By default, if a return is already in progress, we&#39;ll respond with a
-</code>return_in_progress<code class="prettyprint">error code and include the status of the return. You may
-override this behavior by setting</code>cancel_pending<code class="prettyprint">to</code>true`. This will cause us
-to cancel any pending returns before attempting to place the return.</p>
-
-<p>You can also use the new <code class="prettyprint">return_in_progress</code> error to check the status of your
-return. Just supply an invalid <code class="prettyprint">method_code</code> like &quot;Dummy Method Code&rdquo;. If the
-return is in progress, you&rsquo;ll get the status back with the error. If the return
-is not yet started, we&rsquo;ll be unable to start a return because the method code
-does not exist.</p>
-
-<blockquote>
-<p>Checking on a returned order</p>
-</blockquote>
-<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/returns/&lt;return request_id&gt;"</span> <span class="se">\</span>
-  -u &lt;client_token&gt;: <span class="se">\</span>
-</code></pre>
-
 <h2 id="refunds">Refunds</h2>
 
 <p>In some cases, a Managed Account order might initially succeed (and thus charge
@@ -961,7 +987,7 @@ your account) but later need to be reversed. For example, your buyer might want
 to return the product, or the order may be cancelled by the Amazon seller.</p>
 
 <p>To address these cases, we&rsquo;ve created a refund process. All refunds will be sent
-to the Pro-buyer responsible for your order for them to approve or decline. Any
+to Zinc, which we will approve or decline. Any
 declined refunds may be appealed to support@zinc.io.</p>
 
 <p>When there&rsquo;s a successful cancellation (see above) or a return created through
@@ -994,7 +1020,7 @@ manually.</p>
 </tr>
 <tr>
 <td>requested</td>
-<td>A refund has been requested. The Pro-buyer has 30 days to respond.</td>
+<td>A refund has been requested. Zinc has 30 days to respond.</td>
 </tr>
 <tr>
 <td>refunded</td>
@@ -1002,7 +1028,7 @@ manually.</p>
 </tr>
 <tr>
 <td>declined</td>
-<td>The Pro-buyer has declined the refund request. Please contact support@zinc.io if you need more information.</td>
+<td>Zinc has declined the refund request. Please contact support@zinc.io if you need more information.</td>
 </tr>
 </tbody></table>
 
@@ -1030,7 +1056,7 @@ manually.</p>
 </thead><tbody>
 <tr>
 <td><code class="prettyprint">attempting_to_cancel</code></td>
-<td>You attempted to cancel the order, but are unsure if it completed. The Pro-buyer will refund if possible and decline if the order actually went through.</td>
+<td>You attempted to cancel the order, but are unsure if it completed. Zinc will refund if possible and decline if the order actually went through.</td>
 </tr>
 <tr>
 <td><code class="prettyprint">return_completed</code></td>
