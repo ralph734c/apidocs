@@ -1417,6 +1417,11 @@ support@zinc.io and use the code: <code class="prettyprint">other</code>.</p>
 <td>String</td>
 <td>(Optional) The verification code required by the retailer for logging in. Only required in cases where the retailer prevents a login with an <code class="prettyprint">account_locked_verification_required</code> error code.</td>
 </tr>
+<tr>
+<td>totp_2fa_key</td>
+<td>String</td>
+<td>(Optional) The secret key used for two factor authentication. If you have two factor authentication enabled, you must provide this key. You can find the 64 digit Amazon key by enabling two factor authentication and clicking on the &ldquo;Can&rsquo;t scan the barcode?&rdquo; link. Note this is not the 6 digit time based code.</td>
+</tr>
 </tbody></table>
 
 <h2 id="price-components-object">Price components object</h2>
