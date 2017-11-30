@@ -548,9 +548,14 @@ error code will be removed and the updated response will take its place.</p>
   -u &lt;client_token&gt;: <span class="se">\</span>
 </code></pre>
 
-<h2 id="returns">Returns</h2>
+          <h1 id="returns">Returns</h1>
 
-<p>The Zinc API also supports generating return labels through Amazon.</p>
+<h2 id="create-a-return">Create a Return</h2>
+
+<p>The Zinc API also supports generating return labels. Returns are only available
+on the following retailers: <code class="prettyprint">amazon</code>, <code class="prettyprint">amazon_uk</code>. You can create a return for
+an order by hitting the <code class="prettyprint">https://api.zinc.io/v1/orders/&lt;request_id&gt;/return</code>
+route where <code class="prettyprint">request_id</code> is the request id of the original order.</p>
 
 <blockquote>
 <p>Example return label request</p>
@@ -572,40 +577,153 @@ error code will be removed and the updated response will take its place.</p>
   }'</span>
 </code></pre>
 
-<p><code class="prettyprint">webhooks</code> and <code class="prettyprint">cancel_pending</code> are optional, but the other four fields are required.</p>
+<blockquote>
+<p>Example return label response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"request_id"</span>: <span class="s2">"3f1c939065cf58e7b9f0aea70640dffc"</span>
+<span class="o">}</span>
+</code></pre>
 
-<p><code class="prettyprint">products</code> is in the same format as for an order. It determines which products
-of a multi-item order to return.</p>
+<h3 id="required-attributes">Required attributes</h3>
 
-<p><code class="prettyprint">reason_code</code> and <code class="prettyprint">method_code</code> are passed directly to Amazon. The available
-options may vary based on Amazon country and customer address. However, <code class="prettyprint">UPS
-Dropoff</code> is the only method supported for automatic refunds. If you&rsquo;d like to
-use a different method, you&rsquo;ll need to manually request refunds as specified
-below.</p>
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>products</td>
+<td>List</td>
+<td>A list of <a href="#product-object">product objects</a> that should be returned</td>
+</tr>
+<tr>
+<td>reason_code</td>
+<td>String</td>
+<td>The reason for the return. This is passed directly to</td>
+</tr>
+</tbody></table>
 
-<p>Many users have had success using &ldquo;inaccurate website description&rdquo; for
-Amazon.com and &ldquo;description on website was not accurate&rdquo; for Amazon.co.uk.</p>
+<p>Amazon. Reason codes will vary depending on Amazon country. Many users have had
+success using &ldquo;inaccurate website description&rdquo; for Amazon.com and &ldquo;description
+on website was not accurate&rdquo; for Amazon.co.uk. Note that the reason_code must
+be an exact match with the reason code dropdown available on Amazon.
+method_code | String | The method of returning the specified products. This is
+passed directly to Amazon. The available options may vary based on Amazon
+country and customer address. Note that <code class="prettyprint">UPS Dropoff</code> is the only method
+supported for automatic refunds on Zinc Managed Account orders. If you&rsquo;d like
+to use a different method, you&rsquo;ll need to manually request a refund.
+explanation | String | Any extra information that will be passed to Amazon or
+the Amazon seller. It is required for some return reasons.</p>
 
-<p><code class="prettyprint">explanation</code> is extra information that will be passed to Amazon or the Amazon
-seller. It is required for some return reasons.</p>
+<h3 id="optional-attributes">Optional attributes</h3>
 
-<p>By default, if a return is already in progress, we&rsquo;ll respond with a
-<code class="prettyprint">return_in_progress</code> error code and include the status of the return. You may
-override this behavior by setting <code class="prettyprint">cancel_pending</code> to <code class="prettyprint">true</code>. This will cause us
-to cancel any pending returns before attempting to place the return.</p>
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>webhooks</td>
+<td>Object</td>
+<td>A <a href="#webhooks-object">webhooks object</a> including URLs that</td>
+</tr>
+</tbody></table>
 
-<p>You can also use the new <code class="prettyprint">return_in_progress</code> error to check the status of your
-return. Just supply an invalid <code class="prettyprint">method_code</code> like &ldquo;Dummy Method Code&rdquo;. If the
-return is in progress, you&rsquo;ll get the status back with the error. If the return
+<p>will receive POST requests after particular events have finished.
+cancel_pending | Boolean | Whether or not this request should cancel any
+pending returns while creating a new return. If false, the request will return
+a <code class="prettyprint">return_in_progress</code> error code if a pending return already exists. Defaults
+to false.
+return_address | Object | An <a href="#address-object">address object</a> from which the
+return is sent. If not provided, the default return address from Amazon will
+be used.</p>
+
+<p>You can use the <code class="prettyprint">return_in_progress</code> error to check the status of your return.
+Just supply an invalid <code class="prettyprint">method_code</code> like &ldquo;Dummy Method Code&rdquo;. If the return is
+in progress, you&rsquo;ll get the status back with the error. If the return
 is not yet started, we&rsquo;ll be unable to start a return because the method code
 does not exist.</p>
 
+<h2 id="retrieving-a-return">Retrieving a return</h2>
+
 <blockquote>
-<p>Checking on a returned order</p>
+<p>Example return retrieval request</p>
 </blockquote>
-<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/returns/&lt;return request_id&gt;"</span> <span class="se">\</span>
-  -u &lt;client_token&gt;: <span class="se">\</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/returns/&lt;request_id&gt;"</span> <span class="se">\</span>
+  -u &lt;client_token&gt;:
 </code></pre>
+
+<blockquote>
+<p>Example return retrieval response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"_type"</span>: <span class="s2">"return_response"</span>,
+  <span class="s2">"merchant_return_id"</span>: <span class="s2">"1b95c9d5-6a4c-409d-9598-6e5da88b91e7"</span>,
+  <span class="s2">"return_by"</span>: <span class="s2">"2018-02-01T00:00:00"</span>,
+  <span class="s2">"label_urls"</span>: <span class="o">[</span>
+    <span class="s2">"https://zincapi.s3.amazonaws.com/2791c7cf243f44349ac1fbf179dd7428_return_label.pdf"</span>
+  <span class="o">]</span>,
+  <span class="s2">"request"</span>: <span class="o">{</span>
+    ...
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+
+<blockquote>
+<p>Example <code class="prettyprint">return_in_progress</code> return retrieval response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"_type"</span>: <span class="s2">"error"</span>,
+  <span class="s2">"code"</span>: <span class="s2">"return_in_progress"</span>,
+  <span class="s2">"message"</span>: <span class="s2">"A return is currently in progress for the items you specified."</span>,
+  <span class="s2">"data"</span>: <span class="o">{</span>
+    <span class="s2">"status"</span>: <span class="o">{</span>
+      <span class="s2">"status"</span>: <span class="s2">"Refund issued"</span>,
+      <span class="s2">"description"</span>: <span class="s2">"</span><span class="nv">$6</span><span class="s2">.30 refund issued on Nov 22, 2017."</span>
+    <span class="o">}</span>,
+    <span class="s2">"error"</span>: <span class="s2">"Tried to cancel but could not find cancel button"</span>,
+  <span class="o">}</span>,
+  <span class="s2">"request"</span>: <span class="o">{</span>
+    ...
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+
+<h3 id="return-response-attributes">Return response attributes</h3>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchant_return_id</td>
+<td>String</td>
+<td>A unique identifier for the return</td>
+</tr>
+<tr>
+<td>return_by</td>
+<td>String</td>
+<td>The date before which the products must be returned by</td>
+</tr>
+<tr>
+<td>label_urls</td>
+<td>Array</td>
+<td>A list of URLs for the generated return labels</td>
+</tr>
+<tr>
+<td>request</td>
+<td>Object</td>
+<td>The original request that was sent to the Zinc API</td>
+</tr>
+</tbody></table>
 
           <h1 id="product-details">Product details</h1>
 
