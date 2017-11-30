@@ -482,27 +482,66 @@ the <code class="prettyprint">retailer_credentials</code> object.</p>
 <h2 id="aborting-an-order">Aborting an order</h2>
 
 <p>The Zinc API allows you to abort an order uncompleted orders that are still
-in the <code class="prettyprint">request_processing</code> stage. This
-functionality allows you to stop an order from going through if a mistake was made
-on the order, or if the order is taking too long to process.</p>
+in the <code class="prettyprint">request_processing</code> stage. This functionality allows you to stop an
+order from going through if a mistake was made on the order, or if the order
+is taking too long to process.</p>
 
 <blockquote>
-<p>Example abort POST</p>
+<p>Example order abort request</p>
 </blockquote>
 <pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;request_id&gt;/abort"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
   -u &lt;client_token&gt;:
 </code></pre>
 
-<p>The response to this request will be a standard GET response for an order.
-If we are able to successfully abort the order, an <code class="prettyprint">aborted_request</code> error code
-will be returned for the order in question. You may need to continue to wait before
-the API is able to abort a request on an already running process.</p>
+<blockquote>
+<p>Example successful order abort response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"_type"</span>: <span class="s2">"error"</span>,
+  <span class="s2">"code"</span>: <span class="s2">"aborted_request"</span>,
+  <span class="s2">"message"</span>: <span class="s2">"The request was aborted before it completed."</span>,
+  <span class="s2">"data"</span>: <span class="o">{</span>
+    <span class="s2">"msg"</span>: <span class="s2">"Order aborted and dequeued"</span>
+  <span class="o">}</span>,
+  <span class="s2">"request_id"</span>: <span class="s2">"3f1c939065cf58e7b9f0aea70640dffc"</span>,
+  <span class="s2">"request"</span>: <span class="o">{</span>
+    ...
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 
-<p>Note that abortion is best effort, so it is not guaranteed that you will be
+<blockquote>
+<p>Example request processing order abort response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"_type"</span>: <span class="s2">"error"</span>,
+  <span class="s2">"code"</span>: <span class="s2">"request_processing"</span>,
+  <span class="s2">"message"</span>: <span class="s2">"Request is currently processing and will complete soon."</span>,
+  <span class="s2">"data"</span>: <span class="o">{}</span>
+  <span class="s2">"request_id"</span>: <span class="s2">"3f1c939065cf58e7b9f0aea70640dffc"</span>,
+<span class="o">}</span>
+
+</code></pre>
+
+<p>The response to this request will be a standard GET response for an order, which is
+either a <code class="prettyprint">request_processing</code> response, an error response, or a successful order
+response. If we are able to successfully abort the order, an <code class="prettyprint">aborted_request</code> error
+code will be returned for the order in question. If you receive back a
+<code class="prettyprint">request_processing</code> response, you will need to continue to wait before the API is
+able to abort a request on an already running process.</p>
+
+<p>If you are using the <code class="prettyprint">request_succeeded</code> and <code class="prettyprint">request_failed</code> webhooks, you won&rsquo;t
+need to do anything with the order abort response. The API will hit the
+<code class="prettyprint">request_failed</code> webhook if an order is aborted correctly, and will have normal
+behavior if the order abortion fails.</p>
+
+<p>Note that abortion is best effort, so we cannot guaranteed that you will be
 able to abort a request.</p>
 
-<h2 id="cancelling-an-order">Cancelling an order</h2>
+          <h1 id="cancellations">Cancellations</h1>
+
+<h2 id="initiating-an-order-cancellation">Initiating an order cancellation</h2>
 
 <p>The Zinc API supports pre-shipment order cancellation on Amazon.com and
 Amazon.co.uk. Simply POST to the cancellation endpoint. Note that cancelling an order
@@ -512,13 +551,22 @@ will send a cancellation request to the retailer and attempt to stop the order f
 shipping and can only be initiated for order requests that were successful.</p>
 
 <blockquote>
-<p>Example cancellation POST</p>
+<p>Example cancellation</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;request_id&gt;/cancel"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  -u &lt;client_token&gt;: <span class="se">\</span>
+</code></pre>
+
+<blockquote>
+<p>Example advanced cancellation</p>
 </blockquote>
 <pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/orders/&lt;request_id&gt;/cancel"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
   -u &lt;client_token&gt;: <span class="se">\</span>
   -H <span class="s1">'Content-type: application/json'</span> <span class="se">\</span>
   -d <span class="s1">'{
+    "merchant_order_id": "112-1234567-7272727",
     "webhooks": {
       "request_succeeded": "https://www.example.com/webhooks/success",
       "request_failed": "https://www.example.com/webhooks/failed"
@@ -526,11 +574,100 @@ shipping and can only be initiated for order requests that were successful.</p>
    }'</span>
 </code></pre>
 
+<blockquote>
+<p>Example cancellation response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"request_id"</span>: <span class="s2">"3f1c939065cf58e7b9f0aea70640dffc"</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>There aren&rsquo;t any required parameters for a cancellation, so you can send an authenticated post to the cancellation URL &ldquo;https://api.zinc.io/v1/orders/<request_id>/cancel&rdquo; without any extra parameters. However, cancellations can only be performed for a single merchant order id. If your order response has multiple merchant order ids, then you need to pass the <code class="prettyprint">merchant_order_id</code> parameter to the request.</p>
+
+<h3 id="optional-cancellation-attributes">Optional cancellation attributes</h3>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchant_order_id</td>
+<td>String</td>
+<td>The merchant order id of the order that you would like to cancel. If multiple merchant order ids exist for a particular order, this parameter is required, otherwise the cancellation request will fail</td>
+</tr>
+<tr>
+<td>webhooks</td>
+<td>Object</td>
+<td>A <a href="#webhooks-object">webhooks object</a> including URLs that will receive POST requests after particular events have finished</td>
+</tr>
+</tbody></table>
+
 <p>The <code class="prettyprint">request_succeeded</code> and <code class="prettyprint">request_failed</code> webhooks are optional. If supplied,
 they will be called when the corresponding event occurs on the cancellation
 request.</p>
 
+<h3 id="cancellation-response-attributes">Cancellation response attributes</h3>
+
+<p>To retrieve a cancellation response given a cancellation request id, simply make a GET request to the cancellation URL &ldquo;https://api.zinc.io/v1/cancellations/<request_id>&rdquo;. You will receive either a <code class="prettyprint">request_processing</code> response, an error response, or a successful cancellation response of type &ldquo;cancellation_response&rdquo;.</p>
+
+<blockquote>
+<p>Example cancellation retrieval request</p>
+</blockquote>
+<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/cancellations/&lt;request_id&gt;"</span> <span class="se">\</span>
+  -u &lt;client_token&gt;:
+</code></pre>
+
+<blockquote>
+<p>Example cancellation retrieval response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"_type"</span>: <span class="s2">"cancellation_response"</span>,
+  <span class="s2">"merchant_order_id"</span>: <span class="s2">"112-1234567-7272727"</span>,
+  <span class="s2">"request"</span>: <span class="o">{</span>
+    ...
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchant_order_id</td>
+<td>String</td>
+<td>The merchant order id of the order that was cancelled</td>
+</tr>
+<tr>
+<td>request</td>
+<td>Object</td>
+<td>The original request that was sent to the Zinc API</td>
+</tr>
+</tbody></table>
+
 <h3 id="attempting-to-cancel">Attempting to cancel</h3>
+
+<blockquote>
+<p>Example <code class="prettyprint">attempting_to_cancel</code> cancellation response</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="o">{</span>
+  <span class="s2">"_type"</span>: <span class="s2">"error"</span>,
+  <span class="s2">"code"</span>: <span class="s2">"attempting_to_cancel"</span>,
+  <span class="s2">"message"</span>: <span class="s2">"The retailer is attempting to cancel the order."</span>,
+  <span class="s2">"data"</span>: <span class="o">{</span>
+    <span class="s2">"msg"</span>: <span class="s2">"Attempting to cancel order"</span>,
+  <span class="o">}</span>,
+  <span class="s2">"request"</span>: <span class="o">{</span>
+    ...
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
 
 <p>In about 50% of cases, Amazon is unable to immediately cancel an order. Instead,
 they tell Zinc that they&rsquo;re &ldquo;Attempting to Cancel&rdquo; the order. This currently
@@ -541,12 +678,14 @@ the status of the order, but no guarantees can be made for how long this will ta
 Once Zinc determines the actual status of the cancellation, the <code class="prettyprint">attempting_to_cancel</code>
 error code will be removed and the updated response will take its place.</p>
 
-<blockquote>
-<p>Checking on a cancelled order</p>
-</blockquote>
-<pre class="highlight shell"><code>curl <span class="s2">"https://api.zinc.io/v1/cancellations/&lt;cancellation request_id&gt;"</span> <span class="se">\</span>
-  -u &lt;client_token&gt;: <span class="se">\</span>
-</code></pre>
+<p>The <code class="prettyprint">request_failed</code> webhook will be hit if the cancellation goes into the
+<code class="prettyprint">attempting_to_cancel</code> state. If it moves out of this state and into an error
+state, the <code class="prettyprint">request_failed</code> webhook will be hit again with the updated
+cancellation response. If the cancellation moves into a successful state, the
+<code class="prettyprint">request_succeeded</code> webhook will be hit with the updated cancellation response.
+Thus if you are using the <code class="prettyprint">request_succeeded</code> and <code class="prettyprint">request_failed</code> webhooks,
+you won&rsquo;t need to poll the cancellation request id to learn about changes from
+the <code class="prettyprint">attempting_to_cancel</code> state.</p>
 
           <h1 id="returns">Returns</h1>
 
@@ -633,20 +772,18 @@ route where <code class="prettyprint">request_id</code> is the request id of the
 <tr>
 <td>cancel_pending</td>
 <td>Boolean</td>
-<td>Whether or not this request should cancel any pending returns while creating a new return. If false, the request will return a <code class="prettyprint">return_in_progress</code> error code if a pending return already exists. Defaults</td>
+<td>Whether or not this request should cancel any pending returns while creating a new return. If false, the request will return a <code class="prettyprint">return_in_progress</code> error code if a pending return already exists. Defaults to false.</td>
+</tr>
+<tr>
+<td>return_address</td>
+<td>Object</td>
+<td>An <a href="#address-object">address object</a> from which the return is sent. If not provided, the default return address from Amazon will be used.</td>
 </tr>
 </tbody></table>
 
-<p>to false.
-return_address | Object | An <a href="#address-object">address object</a> from which the return is sent. If not provided, the default return address from Amazon will be used.</p>
-
-<p>You can use the <code class="prettyprint">return_in_progress</code> error to check the status of your return.
-Just supply an invalid <code class="prettyprint">method_code</code> like &ldquo;Dummy Method Code&rdquo;. If the return is
-in progress, you&rsquo;ll get the status back with the error. If the return
-is not yet started, we&rsquo;ll be unable to start a return because the method code
-does not exist.</p>
-
 <h2 id="retrieving-a-return">Retrieving a return</h2>
+
+<p>To retrieve a return response given a return request id, simply make a GET request to the return URL &ldquo;https://api.zinc.io/v1/returns/<request_id>&rdquo;. You will receive either a <code class="prettyprint">request_processing</code> response, an error response, or a successful cancellation response of type &ldquo;return_response&rdquo;.</p>
 
 <blockquote>
 <p>Example return retrieval request</p>
@@ -721,6 +858,12 @@ does not exist.</p>
 <td>The original request that was sent to the Zinc API</td>
 </tr>
 </tbody></table>
+
+<p>You can use the <code class="prettyprint">return_in_progress</code> error to check the status of your return.
+Just supply an invalid <code class="prettyprint">method_code</code> like &ldquo;Dummy Method Code&rdquo;. If the return is
+in progress, you&rsquo;ll get the status back with the error. If the return
+is not yet started, we&rsquo;ll be unable to start a return because the method code
+does not exist.</p>
 
           <h1 id="product-details">Product details</h1>
 
