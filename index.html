@@ -541,7 +541,7 @@ able to abort a request.</p>
 
           <h1 id="cancellations">Cancellations</h1>
 
-<h2 id="initiating-an-order-cancellation">Initiating an order cancellation</h2>
+<h2 id="initiate-a-cancellation">Initiate a cancellation</h2>
 
 <p>The Zinc API supports pre-shipment order cancellation on Amazon.com and
 Amazon.co.uk. Simply POST to the cancellation endpoint. Note that cancelling an order
@@ -609,9 +609,11 @@ shipping and can only be initiated for order requests that were successful.</p>
 they will be called when the corresponding event occurs on the cancellation
 request.</p>
 
-<h3 id="cancellation-response-attributes">Cancellation response attributes</h3>
+<h2 id="retrieve-a-cancellation">Retrieve a cancellation</h2>
 
 <p>To retrieve a cancellation response given a cancellation request id, simply make a GET request to the cancellation URL &ldquo;https://api.zinc.io/v1/cancellations/<request_id>&rdquo;. You will receive either a <code class="prettyprint">request_processing</code> response, an error response, or a successful cancellation response of type &ldquo;cancellation_response&rdquo;.</p>
+
+<h3 id="cancellation-response-attributes">Cancellation response attributes</h3>
 
 <blockquote>
 <p>Example cancellation retrieval request</p>
@@ -651,7 +653,7 @@ request.</p>
 </tr>
 </tbody></table>
 
-<h3 id="attempting-to-cancel">Attempting to cancel</h3>
+<h2 id="attempting-to-cancel">Attempting to cancel</h2>
 
 <blockquote>
 <p>Example <code class="prettyprint">attempting_to_cancel</code> cancellation response</p>
