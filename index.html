@@ -602,21 +602,19 @@ route where <code class="prettyprint">request_id</code> is the request id of the
 <tr>
 <td>reason_code</td>
 <td>String</td>
-<td>The reason for the return. This is passed directly to</td>
+<td>The reason for the return. This is passed directly to Amazon. Reason codes will vary depending on Amazon country. Many users have had success using &ldquo;inaccurate website description&rdquo; for Amazon.com and &ldquo;description on website was not accurate&rdquo; for Amazon.co.uk. Note that the reason_code must be an exact match with the reason code dropdown available on Amazon.</td>
+</tr>
+<tr>
+<td>method_code</td>
+<td>String</td>
+<td>The method of returning the specified products. This is passed directly to Amazon. The available options may vary based on Amazon country and customer address. Note that <code class="prettyprint">UPS Dropoff</code> is the only method supported for automatic refunds on Zinc Managed Account orders. If you&rsquo;d like to use a different method, you&rsquo;ll need to manually request a refund.</td>
+</tr>
+<tr>
+<td>explanation</td>
+<td>String</td>
+<td>Any extra information that will be passed to Amazon or the Amazon seller. It is required for some return reasons.</td>
 </tr>
 </tbody></table>
-
-<p>Amazon. Reason codes will vary depending on Amazon country. Many users have had
-success using &ldquo;inaccurate website description&rdquo; for Amazon.com and &ldquo;description
-on website was not accurate&rdquo; for Amazon.co.uk. Note that the reason_code must
-be an exact match with the reason code dropdown available on Amazon.
-method_code | String | The method of returning the specified products. This is
-passed directly to Amazon. The available options may vary based on Amazon
-country and customer address. Note that <code class="prettyprint">UPS Dropoff</code> is the only method
-supported for automatic refunds on Zinc Managed Account orders. If you&rsquo;d like
-to use a different method, you&rsquo;ll need to manually request a refund.
-explanation | String | Any extra information that will be passed to Amazon or
-the Amazon seller. It is required for some return reasons.</p>
 
 <h3 id="optional-attributes">Optional attributes</h3>
 
@@ -630,18 +628,17 @@ the Amazon seller. It is required for some return reasons.</p>
 <tr>
 <td>webhooks</td>
 <td>Object</td>
-<td>A <a href="#webhooks-object">webhooks object</a> including URLs that</td>
+<td>A <a href="#webhooks-object">webhooks object</a> including URLs that will receive POST requests after particular events have finished.</td>
+</tr>
+<tr>
+<td>cancel_pending</td>
+<td>Boolean</td>
+<td>Whether or not this request should cancel any pending returns while creating a new return. If false, the request will return a <code class="prettyprint">return_in_progress</code> error code if a pending return already exists. Defaults</td>
 </tr>
 </tbody></table>
 
-<p>will receive POST requests after particular events have finished.
-cancel_pending | Boolean | Whether or not this request should cancel any
-pending returns while creating a new return. If false, the request will return
-a <code class="prettyprint">return_in_progress</code> error code if a pending return already exists. Defaults
-to false.
-return_address | Object | An <a href="#address-object">address object</a> from which the
-return is sent. If not provided, the default return address from Amazon will
-be used.</p>
+<p>to false.
+return_address | Object | An <a href="#address-object">address object</a> from which the return is sent. If not provided, the default return address from Amazon will be used.</p>
 
 <p>You can use the <code class="prettyprint">return_in_progress</code> error to check the status of your return.
 Just supply an invalid <code class="prettyprint">method_code</code> like &ldquo;Dummy Method Code&rdquo;. If the return is
@@ -663,10 +660,10 @@ does not exist.</p>
 </blockquote>
 <pre class="highlight shell"><code><span class="o">{</span>
   <span class="s2">"_type"</span>: <span class="s2">"return_response"</span>,
-  <span class="s2">"merchant_return_id"</span>: <span class="s2">"1b95c9d5-6a4c-409d-9598-6e5da88b91e7"</span>,
+  <span class="s2">"merchant_return_id"</span>: <span class="s2">"12345678-abcd-efgh-1234-abcde1234567"</span>,
   <span class="s2">"return_by"</span>: <span class="s2">"2018-02-01T00:00:00"</span>,
   <span class="s2">"label_urls"</span>: <span class="o">[</span>
-    <span class="s2">"https://zincapi.s3.amazonaws.com/2791c7cf243f44349ac1fbf179dd7428_return_label.pdf"</span>
+    <span class="s2">"https://zincapi.s3.amazonaws.com/3f1c939065cf58e7b9f0aea70640dffc_return_label.pdf"</span>
   <span class="o">]</span>,
   <span class="s2">"request"</span>: <span class="o">{</span>
     ...
