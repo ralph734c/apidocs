@@ -170,8 +170,6 @@
 
 <h2 id="create-an-order">Create an order</h2>
 
-<p>Zinc offers the underlying API for apps that need real-time order placing capabilities. With a single POST request, you can order an item from one of our supported retailers. Making an order request will start an order. You&rsquo;ll receive a <code class="prettyprint">request_id</code> in the POST body&rsquo;s response which you&rsquo;ll then use for <a href="#retrieving-an-order">retrieving the status of the order</a>.</p>
-
 <blockquote>
 <p>Example create an order request</p>
 </blockquote>
@@ -252,6 +250,8 @@
   <span class="s2">"request_id"</span>: <span class="s2">"3f1c939065cf58e7b9f0aea70640dffc"</span>
 <span class="o">}</span>
 </code></pre>
+
+<p>Zinc offers the underlying API for apps that need real-time order placing capabilities. With a single POST request, you can order an item from one of our supported retailers. Making an order request will start an order. You&rsquo;ll receive a <code class="prettyprint">request_id</code> in the POST body&rsquo;s response which you&rsquo;ll then use for <a href="#retrieving-an-order">retrieving the status of the order</a>.</p>
 
 <h3 id="required-attributes">Required attributes</h3>
 
@@ -481,11 +481,6 @@ the <code class="prettyprint">retailer_credentials</code> object.</p>
 
 <h2 id="aborting-an-order">Aborting an order</h2>
 
-<p>The Zinc API allows you to abort an order uncompleted orders that are still
-in the <code class="prettyprint">request_processing</code> stage. This functionality allows you to stop an
-order from going through if a mistake was made on the order, or if the order
-is taking too long to process.</p>
-
 <blockquote>
 <p>Example order abort request</p>
 </blockquote>
@@ -524,6 +519,11 @@ is taking too long to process.</p>
 
 </code></pre>
 
+<p>The Zinc API allows you to abort an order uncompleted orders that are still
+in the <code class="prettyprint">request_processing</code> stage. This functionality allows you to stop an
+order from going through if a mistake was made on the order, or if the order
+is taking too long to process.</p>
+
 <p>The response to this request will be a standard GET response for an order, which is
 either a <code class="prettyprint">request_processing</code> response, an error response, or a successful order
 response. If we are able to successfully abort the order, an <code class="prettyprint">aborted_request</code> error
@@ -542,13 +542,6 @@ able to abort a request.</p>
           <h1 id="cancellations">Cancellations</h1>
 
 <h2 id="initiate-a-cancellation">Initiate a cancellation</h2>
-
-<p>The Zinc API supports pre-shipment order cancellation on Amazon.com and
-Amazon.co.uk. Simply POST to the cancellation endpoint. Note that cancelling an order
-occurs after an order has been successfully placed on the API. This is distinct from
-an order abort, which occurs while the order is still in progress. Cancellations
-will send a cancellation request to the retailer and attempt to stop the order from
-shipping and can only be initiated for order requests that were successful.</p>
 
 <blockquote>
 <p>Example cancellation</p>
@@ -582,6 +575,13 @@ shipping and can only be initiated for order requests that were successful.</p>
 <span class="o">}</span>
 </code></pre>
 
+<p>The Zinc API supports pre-shipment order cancellation on Amazon.com and
+Amazon.co.uk. Simply POST to the cancellation endpoint. Note that cancelling an order
+occurs after an order has been successfully placed on the API. This is distinct from
+an order abort, which occurs while the order is still in progress. Cancellations
+will send a cancellation request to the retailer and attempt to stop the order from
+shipping and can only be initiated for order requests that were successful.</p>
+
 <p>There aren&rsquo;t any required parameters for a cancellation, so you can send an authenticated post to the cancellation URL &ldquo;https://api.zinc.io/v1/orders/<request_id>/cancel&rdquo; without any extra parameters. However, cancellations can only be performed for a single merchant order id. If your order response has multiple merchant order ids, then you need to pass the <code class="prettyprint">merchant_order_id</code> parameter to the request.</p>
 
 <h3 id="optional-cancellation-attributes">Optional cancellation attributes</h3>
@@ -611,10 +611,6 @@ request.</p>
 
 <h2 id="retrieve-a-cancellation">Retrieve a cancellation</h2>
 
-<p>To retrieve a cancellation response given a cancellation request id, simply make a GET request to the cancellation URL &ldquo;https://api.zinc.io/v1/cancellations/<request_id>&rdquo;. You will receive either a <code class="prettyprint">request_processing</code> response, an error response, or a successful cancellation response of type &ldquo;cancellation_response&rdquo;.</p>
-
-<h3 id="cancellation-response-attributes">Cancellation response attributes</h3>
-
 <blockquote>
 <p>Example cancellation retrieval request</p>
 </blockquote>
@@ -633,6 +629,10 @@ request.</p>
   <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
+
+<p>To retrieve a cancellation response given a cancellation request id, simply make a GET request to the cancellation URL &ldquo;https://api.zinc.io/v1/cancellations/<request_id>&rdquo;. You will receive either a <code class="prettyprint">request_processing</code> response, an error response, or a successful cancellation response of type &ldquo;cancellation_response&rdquo;.</p>
+
+<h3 id="cancellation-response-attributes">Cancellation response attributes</h3>
 
 <table><thead>
 <tr>
@@ -693,11 +693,6 @@ the <code class="prettyprint">attempting_to_cancel</code> state.</p>
 
 <h2 id="create-a-return">Create a Return</h2>
 
-<p>The Zinc API also supports generating return labels. Returns are only available
-on the following retailers: <code class="prettyprint">amazon</code>, <code class="prettyprint">amazon_uk</code>. You can create a return for
-an order by hitting the <code class="prettyprint">https://api.zinc.io/v1/orders/&lt;request_id&gt;/return</code>
-route where <code class="prettyprint">request_id</code> is the request id of the original order.</p>
-
 <blockquote>
 <p>Example return label request</p>
 </blockquote>
@@ -725,6 +720,11 @@ route where <code class="prettyprint">request_id</code> is the request id of the
   <span class="s2">"request_id"</span>: <span class="s2">"3f1c939065cf58e7b9f0aea70640dffc"</span>
 <span class="o">}</span>
 </code></pre>
+
+<p>The Zinc API also supports generating return labels. Returns are only available
+on the following retailers: <code class="prettyprint">amazon</code>, <code class="prettyprint">amazon_uk</code>. You can create a return for
+an order by hitting the <code class="prettyprint">https://api.zinc.io/v1/orders/&lt;request_id&gt;/return</code>
+route where <code class="prettyprint">request_id</code> is the request id of the original order.</p>
 
 <h3 id="required-attributes">Required attributes</h3>
 
@@ -785,8 +785,6 @@ route where <code class="prettyprint">request_id</code> is the request id of the
 
 <h2 id="retrieving-a-return">Retrieving a return</h2>
 
-<p>To retrieve a return response given a return request id, simply make a GET request to the return URL &ldquo;https://api.zinc.io/v1/returns/<request_id>&rdquo;. You will receive either a <code class="prettyprint">request_processing</code> response, an error response, or a successful cancellation response of type &ldquo;return_response&rdquo;.</p>
-
 <blockquote>
 <p>Example return retrieval request</p>
 </blockquote>
@@ -830,6 +828,8 @@ route where <code class="prettyprint">request_id</code> is the request id of the
 <span class="o">}</span>
 </code></pre>
 
+<p>To retrieve a return response given a return request id, simply make a GET request to the return URL &ldquo;https://api.zinc.io/v1/returns/<request_id>&rdquo;. You will receive either a <code class="prettyprint">request_processing</code> response, an error response, or a successful cancellation response of type &ldquo;return_response&rdquo;.</p>
+
 <h3 id="return-response-attributes">Return response attributes</h3>
 
 <table><thead>
@@ -869,14 +869,14 @@ does not exist.</p>
 
           <h1 id="product-details">Product details</h1>
 
-<p>Get up to date information on the title, description, manufacturer details, item specifics, and more for any product on our supported retailers.</p>
-
 <blockquote>
 <p>Example product details request</p>
 </blockquote>
 <pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964?retailer<span class="o">=</span>amazon <span class="se">\</span>
   -u &lt;client_token&gt;:
 </code></pre>
+
+<p>Get up to date information on the title, description, manufacturer details, item specifics, and more for any product on our supported retailers.</p>
 
 <p>To retrieve product details, make a GET request to the following URL, replacing <code class="prettyprint">:product_id</code> with the retailer&rsquo;s unique identifier for a particular product and specifying the request attributes as query parameters in the URL.</p>
 
@@ -1044,14 +1044,14 @@ does not exist.</p>
 
 <h1 id="product-prices">Product prices</h1>
 
-<p>Get information about all the offers for a particular product, including seller name, item price, shipping price, condition, seller reputation, and more.</p>
-
 <blockquote>
 <p>Example product offers request</p>
 </blockquote>
 <pre class="highlight shell"><code>curl https://api.zinc.io/v1/products/0923568964/offers?retailer<span class="o">=</span>amazon <span class="se">\</span>
   -u &lt;client_token&gt;:
 </code></pre>
+
+<p>Get information about all the offers for a particular product, including seller name, item price, shipping price, condition, seller reputation, and more.</p>
 
 <p>To retrieve product offers and prices, make a GET request to the following URL, replacing <code class="prettyprint">:product_id</code> with the retailer&rsquo;s unique identifier for a particular product and specifying the request attributes as query parameters in the URL.</p>
 
