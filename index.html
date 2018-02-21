@@ -226,8 +226,8 @@
     "totp_2fa_key": "3DE4 3ERE 23WE WIKJ GRSQ VOBG CO3D METM 2NO2 OGUX Z7U4 DP2H UYMA"
   },
   "webhooks": {
-    "order_placed": "http://mywebsite.com/zinc/order_placed",
-    "order_failed": "http://mywebsite.com/zinc/order_failed",
+    "request_succeeded": "http://mywebsite.com/zinc/request_succeeded",
+    "request_failed": "http://mywebsite.com/zinc/requrest_failed",
     "tracking_obtained": "http://mywebsite.com/zinc/tracking_obtained"
   },
   "client_notes": {
@@ -335,12 +335,7 @@
 <tr>
 <td>promo_codes</td>
 <td>Array</td>
-<td>A list of promotion codes to use at checkout.</td>
-</tr>
-<tr>
-<td>ignore_invalid_promo_code</td>
-<td>Boolean</td>
-<td>Continue with checkout even if promotion codes are invalid. Default is <code class="prettyprint">false</code>.</td>
+<td>A list of promotion codes to use at checkout. See <a href="#promo-code-object">promo code</a> object.</td>
 </tr>
 <tr>
 <td>po_number</td>
@@ -1787,14 +1782,24 @@ support@zinc.io and use the code: <code class="prettyprint">other</code>.</p>
 <td>The webhook URL to send data to when a request succeeds</td>
 </tr>
 <tr>
+<td>order_placed</td>
+<td>String</td>
+<td>(deprecated) Synonym for request_succeeded (placing orders call only)</td>
+</tr>
+<tr>
 <td>request_failed</td>
 <td>String</td>
 <td>The webhook URL to send data to when a request fails</td>
 </tr>
 <tr>
+<td>order_failed</td>
+<td>String</td>
+<td>(deprecated) Synonym for request_failed (placing orders call only)</td>
+</tr>
+<tr>
 <td>tracking_obtained</td>
 <td>String</td>
-<td>The webhook URL to send data to when tracking for an order is retrieved</td>
+<td>The webhook URL to send data to when tracking for an order is retrieved (placing orders call only)</td>
 </tr>
 <tr>
 <td>status_updated</td>
@@ -1802,6 +1807,8 @@ support@zinc.io and use the code: <code class="prettyprint">other</code>.</p>
 <td>The webhook URL to send data to when the status of a request is updated</td>
 </tr>
 </tbody></table>
+
+<p>You can optionally pass an Array of webhooks instead of a String, and Zinc will hit all of the webhooks.</p>
 
 <h2 id="retailer-credentials-object">Retailer credentials object</h2>
 
@@ -1840,6 +1847,58 @@ support@zinc.io and use the code: <code class="prettyprint">other</code>.</p>
 <td>totp_2fa_key</td>
 <td>String</td>
 <td>(Optional) The secret key used for two factor authentication. If you have two factor authentication enabled, you must provide this key. You can find the 64 digit Amazon key by enabling two factor authentication and clicking on the &ldquo;Can&rsquo;t scan the barcode?&rdquo; link. Note this is not the 6 digit time based code.</td>
+</tr>
+</tbody></table>
+
+<h2 id="promo-code-object">Promo code object</h2>
+
+<blockquote>
+<p>Example promo code object</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FIVEBUCKSOFF"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"optional"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"merchant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A3GH440E2AFGH4"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"discount_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<table><thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>String</td>
+<td>The promo code to apply (required)</td>
+</tr>
+<tr>
+<td>optional</td>
+<td>Boolean</td>
+<td>(Optional) Should we continue placing the order if this code fails to apply? Defaults to false.</td>
+</tr>
+<tr>
+<td>merchant_id</td>
+<td>String</td>
+<td>(Optional) If supplied, only try this code if we selected an offer from the given merchant.</td>
+</tr>
+<tr>
+<td>discount_amount</td>
+<td>Number</td>
+<td>(Optional) Fixed amount in cents by which we should discount the matching merchant&rsquo;s offers during offer selection. Only makes sense if merchant_id is also supplied. Defaults to 0.</td>
+</tr>
+<tr>
+<td>discount_percentage</td>
+<td>Number</td>
+<td>(Optional) Percentage amount (between 0 and 100) by which we should discount the matching merchant&rsquo;s offers during offer selection. Only makes sense if merchant_id is also supplied. Defaults to 0.</td>
+</tr>
+<tr>
+<td>cost_override</td>
+<td>Number</td>
+<td>(Optional) If supplied, we will assume all offers by this merchant cost exactly this many cents. Only makes sense if merchant_id is also supplied. Overrides other discount methods.</td>
 </tr>
 </tbody></table>
 
