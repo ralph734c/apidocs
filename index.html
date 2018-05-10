@@ -47,7 +47,7 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='http://dash.zinc.io'>Sign Up for a Zinc account</a></li>
+            <li><a href='http://dash.zinc.io/signup'>Sign Up for a Zinc account</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -60,7 +60,7 @@
 <h3 id="quick-start">Quick start</h3>
 
 <ol>
-<li>Make an account at <a href="https://dash.zinc.io">dash.zinc.io</a>.</li>
+<li>Make an account at <a href="https://dash.zinc.io/signup">dash.zinc.io</a>.</li>
 <li>Follow the instructions in the <a href="#create-an-order">create an order</a> section from the documentation below to place your first order.</li>
 </ol>
 
@@ -106,8 +106,22 @@
 <td>Y</td>
 </tr>
 <tr>
+<td>Amazon Germany†</td>
+<td>amazon_de</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
 <td>Amazon Mexico†</td>
 <td>amazon_mx</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Amazon Germany†</td>
+<td>amazon_de</td>
 <td>Y</td>
 <td>Y</td>
 <td>Y</td>
@@ -1328,7 +1342,7 @@ does not exist.</p>
 
 <p>To retrieve product offers and prices, make a GET request to the following URL, replacing :query with a url-encoded query string and specifying the request attributes as query parameters in the URL.</p>
 
-<p><code class="prettyprint">https://api.zinc.io/v1/search?query:query&amp;page=1&amp;retailer=amazon</code></p>
+<p><code class="prettyprint">https://api.zinc.io/v1/search?query=:query&amp;page=1&amp;retailer=amazon</code></p>
 
 <h3 id="required-request-attributes">Required request attributes</h3>
 
@@ -2531,7 +2545,7 @@ support@zinc.io and use the code: <code class="prettyprint">other</code>.</p>
 </tr>
 <tr>
 <td>order_probably_placed</td>
-<td>This order was probably placed, but we were not able to retrieve the merchant order ids.</td>
+<td>This order was probably placed, but we were not able to retrieve the merchant order ids. You&rsquo;ll need to retry the order, so manually check the retailer website to see if the order was actually placed. If it was, cancel it and then retry the order.</td>
 </tr>
 <tr>
 <td>payment_info_problem</td>
@@ -2566,6 +2580,93 @@ support@zinc.io and use the code: <code class="prettyprint">other</code>.</p>
 <td>You are not authorized to make this API call. Please contact support@zinc.io. (Usually, attempting to use Addax before it has been enabled)</td>
 </tr>
 </tbody></table>
+
+          <h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+
+<h3 id="if-we-wish-to-place-a-large-quantity-of-orders-is-it-best-to-place-a-large-number-of-orders-with-one-product-per-order-or-a-smaller-number-of-orders-with-multiple-products-in-each">If we wish to place a large quantity of orders, is it best to place a large number of orders with one product per order or a smaller number of orders with multiple products in each?</h3>
+
+<ul>
+<li>Either will work but there are tradeoffs. Orders with a single product will produce better error messages when something goes wrong and will not cause other items to not be ordered when individual items fail. Larger quantities in a single order will process faster as there is a cap on the number of orders that can be placed in a short time frame, and will be more likely to have free shipping, depending on the retailer.</li>
+</ul>
+
+<h3 id="will-placing-many-orders-in-short-succession-cause-the-retailer-to-lock-our-account">Will placing many orders in short succession cause the retailer to lock our account?</h3>
+
+<ul>
+<li>No. Our system throttles the requests for individual accounts so we should not trigger lockouts from retailers.</li>
+</ul>
+
+<h3 id="what-products-can-i-buy-with-the-automatic-ordering-api">What products can I buy with the Automatic Ordering API?</h3>
+
+<ul>
+<li>The API supports most products, but there are some notable exceptions: digital products (such as e-books), gift cards, Prime Pantry, Amazon Fresh items, and speciality Amazon products (such as the Echo and Kindle) are not supported. Also, products that require local pickup, scheduled delivery, age verification, or any other extra specialty step during checkout will fail.</li>
+</ul>
+
+<h3 id="i-submitted-a-lot-of-orders-at-once-why-are-they-processing-slower">I submitted a lot of orders at once, why are they processing slower?</h3>
+
+<ul>
+<li>They are not, they are just queued on our end. For each Amazon account, orders are placed one by one, since you can&rsquo;t have more than one shopping cart at a time. For example, each Amazon order takes about 2 minutes to process, so if you submit 10 orders at the same time for the same Amazon account, the last order will take about 20 minutes to process. If you need orders placed faster, consider using multiple retailer accounts.</li>
+</ul>
+
+<h3 id="i-received-an-internal_error-response-from-the-automatic-ordering-api-how-do-i-handle-this">I received an internal_error response from the Automatic Ordering API. How do I handle this?</h3>
+
+<ul>
+<li>Internal errors are caused by either an outage on the retailer&rsquo;s side (e.g. Amazon or Walmart are having issues) or a temporary Zinc problem. Internal errors are safe to retry &ndash; we recommend using exponential backoff to place another order if you receive an internal error.</li>
+</ul>
+
+<h3 id="my-item-has-variants-how-do-i-ensure-i-order-the-correct-item-with-zinc">My item has variants, how do I ensure I order the correct item with Zinc?</h3>
+
+<ul>
+<li>Each Amazon ASIN corresponds to a single variant. Please use our free Google Chrome extension <a href="https://chrome.google.com/webstore/detail/yakpal/gcjaibancpkbofjlkgihljhdheaokifb?hl=en">YakPal</a> to look up variants for any product page on Amazon. Simply pass the ASIN to Zinc under product_id.</li>
+</ul>
+
+<h3 id="how-can-i-disable-using-a-max_price">How can I disable using a max_price?</h3>
+
+<ul>
+<li>You can set max_price to an arbitrarily high number, such as 10000000, to avoid getting a max_price_exceeded error.</li>
+</ul>
+
+<h3 id="i-am-receiving-an-amazon-security-code-text-asking-me-to-verify-my-identity-when-placing-the-order">I am receiving an Amazon security code text asking me to verify my identity when placing the order.</h3>
+
+<ul>
+<li>This is common when placing orders on a new account for the first time, since we are accessing Amazon from a new IP address. See our documentation about <a href="http://docs.zincapi.com/#amazon-email-verification">Amazon Email Verification</a>.</li>
+</ul>
+
+<h3 id="my-payment-methods-are-saved-in-my-amazon-account-can-i-just-pass-zinc-the-last-4-digits-of-my-credit-card-during-checkout">My payment methods are saved in my Amazon account. Can I just pass Zinc the last 4 digits of my credit card during checkout?</h3>
+
+<ul>
+<li>You need to provide us the the full card because Amazon asks to verify it when shipping to new addresses. Alternative, you can select gift cards as your payment method (and you can use <a href="http://piranha.zinc.io">Piranha</a> to both purchase gift cards as well as automatically load them onto your Amazon 
+accounts).</li>
+</ul>
+
+<h3 id="when-will-my-tracking-number-post">When will my tracking number post?</h3>
+
+<ul>
+<li>Our algorithm checks at various times based on our knowledge of when tracking becomes available. We post this response via webhook.</li>
+</ul>
+
+<h3 id="what-is-the-structure-of-the-post-body-sent-to-the-webhooks">What is the structure of the POST body sent to the webhooks?</h3>
+
+<ul>
+<li>All webhook POST bodies are identical to the Order Response object outlined <a href="http://docs.zincapi.com/#retrieving-an-order">here</a>.</li>
+</ul>
+
+<h3 id="can-i-authenticate-zinc-webhooks">Can I authenticate Zinc webhooks?</h3>
+
+<ul>
+<li>Yes, use basic auth in the webhook URL as detailed by <a href="http://www.ietf.org/rfc/rfc1738.txt">RFC 1738</a>: “https://<username>:<password>@some.server.com/webhookpath” where <username> and <password> are the basic auth username and password respectively.</li>
+</ul>
+
+<h3 id="i-am-not-receiving-posts-to-the-my-webhook-urls">I am not receiving POSTs to the my webhook URLs.</h3>
+
+<ul>
+<li>Make sure that your server is configured to accept POST requests from any other server. To debug this, we recommend creating a <a href="https://requestb.in/">requestbin</a> URL, passing that in as your webhook, and looking at what the data that we returns looks like. This will also confirm to you that our webhooks are working properly.</li>
+</ul>
+
+<h3 id="why-am-i-getting-multiple-posts-to-my-order_placed-or-other-webhook">Why am I getting multiple POSTs to my “order_placed” or other webhook?</h3>
+
+<ul>
+<li>We will retry POSTing the webhook until you return a 200 status code, so make sure you are returning a 200 at your webhook endpoint.</li>
+</ul>
 
       </div>
       <div class="dark-box">
